@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">SmartBus</string>
+    <string name="title_activity_maps">Map</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="description">Never miss your bus with SmartBus</string>
+    <string name="title_activity_login">Smart Bus</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="user_shared_prefs">smart-bus-sharedprefs</string>
+</resources>

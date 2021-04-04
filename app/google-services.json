@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "820365533607",
+    "project_id": "smart-bus-mgmt",
+    "storage_bucket": "smart-bus-mgmt.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:820365533607:android:fab685a3ea5e463cb45682",
+        "android_client_info": {
+          "package_name": "com.fyp.smartbus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "820365533607-i7i1gmral549tv3agvb0nu2rtnap0731.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCowDD559pTzKRVEXWciUGwoE4ySyUuA1s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "820365533607-i7i1gmral549tv3agvb0nu2rtnap0731.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
