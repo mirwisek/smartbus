@@ -7,4 +7,16 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="user_shared_prefs">smart-bus-sharedprefs</string>
+    <string name="login_admin">Login as Admin</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Smart Bus</string>
+    <string name="nav_header_subtitle">Seamless bus tracking...</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_sign_out">Sign Out</string>
+
+    <string name="menu_home">Under-Development</string>
+    <string name="menu_gallery">Under-Development</string>
+    <string name="menu_slideshow">Under-Development</string>
 </resources>
