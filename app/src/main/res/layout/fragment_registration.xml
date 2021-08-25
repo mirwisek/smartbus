@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eaeae5"
+    tools:context=".login.RegistrationFragment">
+
+    <TextView
+        android:id="@+id/tvsingin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="80dp"
+        android:fontFamily="sans-serif-medium"
+        android:letterSpacing="-0.01"
+        android:lineSpacingExtra="20sp"
+        android:text="Register Now"
+        android:textColor="@color/colorPrimary"
+        android:textSize="25sp"
+        android:textStyle="normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:letterSpacing="0.0265"
+        android:text="Register now, To avail our services"
+        android:textColor="@color/colorPrimary"
+        android:textSize="17sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvsingin" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tlemailregister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        app:boxBackgroundMode="outline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etemailregister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorPrimary"
+            android:focusable="true"
+            android:fontFamily="sans-serif"
+            android:hint="@string/email"
+            android:typeface="sans"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+             />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tlpassregister"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:endIconMode="password_toggle"
+        app:boxBackgroundMode="outline"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="@id/tlemailregister"
+        app:layout_constraintStart_toStartOf="@id/tlemailregister"
+        app:layout_constraintTop_toBottomOf="@+id/tlemailregister">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etpassregister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorPrimary"
+            android:focusable="true"
+            android:fontFamily="sans-serif"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:typeface="sans"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tlnameregister"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:endIconCheckable="true"
+        app:boxBackgroundMode="outline"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="@id/tlemailregister"
+        app:layout_constraintStart_toStartOf="@id/tlemailregister"
+        app:layout_constraintTop_toBottomOf="@+id/tlpassregister">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/etusernameregister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorPrimary"
+        android:focusable="true"
+        android:fontFamily="sans-serif"
+        android:hint="@string/username"
+        android:typeface="sans"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+         />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/toggleType"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tlnameregister"
+        app:layout_constraintStart_toStartOf="@id/tlnameregister"
+        app:layout_constraintEnd_toEndOf="@id/tlnameregister"
+        android:layout_marginTop="36dp"
+        android:dividerPadding="0dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:singleSelection="true">
+
+        <com.fyp.smartbus.ui.CheckMaterialButton
+            android:id="@+id/btnStudent"
+            style="@style/ButtonOutlinedChecked"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:checkable="true"
+            android:text="Student" />
+
+        <com.fyp.smartbus.ui.CheckMaterialButton
+            android:id="@+id/btnDriver"
+            style="@style/ButtonOutlinedChecked"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="50dp"
+            android:checkable="true"
+            android:text="Driver" />
+
+    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+<!--    <TextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="30dp"-->
+<!--        android:layout_marginRight="20dp"-->
+<!--        android:hint="select your category:"-->
+<!--        android:textSize="18dp"-->
+<!--        android:textStyle="bold"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/tbstudent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/tlnameregister" />-->
+
+<!--    <ToggleButton-->
+<!--        android:id="@+id/tbstudent"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:layout_marginRight="50dp"-->
+<!--        android:background="@color/colorPrimary"-->
+<!--        android:checked="true"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:textOff="Driver"-->
+<!--        android:textOn="Student"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/tlnameregister" />-->
+
+    <Button
+        android:id="@+id/btnregister"
+        style="@style/loginButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="30dp"
+        android:padding="15dp"
+        android:text="Register"
+        app:iconGravity="textStart"
+        app:iconPadding="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintTop_toBottomOf="@id/toggleType" />
+
+    <TextView
+        android:id="@+id/btnsignin"
+        style="@style/parent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="30dp"
+        android:clickable="true"
+        android:padding="15dp"
+        android:text="@string/register_login_hint"
+        android:textAlignment="textEnd"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        app:iconGravity="textStart"
+        app:iconPadding="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintTop_toBottomOf="@+id/btnregister"
+        app:layout_constraintVertical_bias="0.232" />
+
+    <ProgressBar
+        android:id="@+id/loadingregister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/tvsingin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

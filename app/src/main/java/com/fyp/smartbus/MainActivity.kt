@@ -24,7 +24,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.firebase.ui.auth.AuthUI
-import com.fyp.smartbus.login.LoginActivity
+import com.fyp.smartbus.login.RegistrationActivity
 import com.fyp.smartbus.utils.sharedPref
 import com.fyp.smartbus.utils.toast
 import com.google.android.gms.common.api.ResolvableApiException
@@ -127,7 +127,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun startLogin() {
-        val intent = Intent(this, LoginActivity::class.java)
+        val intent = Intent(this, RegistrationActivity::class.java)
         startActivity(intent)
         finish()
     }

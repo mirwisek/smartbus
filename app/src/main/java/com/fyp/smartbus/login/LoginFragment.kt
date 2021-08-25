@@ -53,29 +53,29 @@ class LoginFragment : Fragment() {
                     .setAvailableProviders(providers)
                     .setTheme(R.style.LoginTheme)
                     .build(),
-                LoginActivity.RC_SIGN_IN
+                RegistrationActivity.RC_SIGN_IN
             )
         }
 
-        view.findViewById<TextView>(R.id.tvAdmin).setOnClickListener {
-            (requireActivity() as LoginActivity).onLoginAsAdminClicked()
-        }
+//        view.findViewById<TextView>(R.id.tvAdmin).setOnClickListener {
+//            (requireActivity() as RegistrationActivity).onLoginAsAdminClicked()
+//        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == LoginActivity.RC_SIGN_IN) {
-            val response = IdpResponse.fromResultIntent(data)
-            if (resultCode == AppCompatActivity.RESULT_OK) { // Successfully signed in
-                (requireActivity() as LoginActivity).onLoginResult(response)
-            } else {
-                // Sign in failed. If response is null the user canceled the
-                // sign-in flow using the back button. Otherwise check
-                // response.getError().getErrorCode() and handle the error.
-                toast("SignIn Failed!")
-            }
-        }
+//        if (requestCode == RegistrationActivity.RC_SIGN_IN) {
+//            val response = IdpResponse.fromResultIntent(data)
+//            if (resultCode == AppCompatActivity.RESULT_OK) { // Successfully signed in
+//                (requireActivity() as RegistrationActivity).onLoginResult(response)
+//            } else {
+//                // Sign in failed. If response is null the user canceled the
+//                // sign-in flow using the back button. Otherwise check
+//                // response.getError().getErrorCode() and handle the error.
+//                toast("SignIn Failed!")
+//            }
+//        }
     }
 
 }

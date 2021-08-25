@@ -1,6 +1,8 @@
 package com.fyp.smartbus.utils
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Resources
 import android.location.Location
@@ -19,10 +21,30 @@ import com.google.firebase.firestore.GeoPoint
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
+const val KEY_USERNAME = "username"
+const val KEY_EMAIL = "email"
+const val KEY_PASSWORD = "password"
+const val KEY_USERTYPE = "usertype"
 
 /*
     * =========== KOTLIN - EXTENSIONS
 */
+fun Activity.switchActivity(targetActivity: Class<*>) {
+    val intent = Intent(this, targetActivity)
+    startActivity(intent)
+    this.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+    this.finish()
+}
+
+fun Fragment.switchActivity(targetActivity: Class<*>){
+    requireActivity().let {act ->
+        val intent = Intent(act, targetActivity)
+        startActivity(intent)
+        act.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        act.finish()
+    }
+
+}
 
 fun View.enable() {
     isEnabled = true
