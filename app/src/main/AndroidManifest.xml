@@ -19,6 +19,9 @@
             android:name=".DriverActivity"
             android:exported="true" />
         <activity
+            android:name=".DrivingActivity"
+            android:exported="true" />
+        <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.SmartBus.NoActionBar" />
@@ -35,7 +38,8 @@
         </activity>
 
         <service
-            android:name=".DriverService"
+            android:name=".DriverLocationService"
+            android:foregroundServiceType="location"
             android:enabled="true"
             android:exported="false" />
 

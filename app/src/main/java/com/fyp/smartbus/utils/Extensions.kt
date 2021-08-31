@@ -1,15 +1,20 @@
 package com.fyp.smartbus.utils
 
 import android.app.Activity
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Resources
+import android.graphics.Color
 import android.location.Location
 import android.os.Build
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
@@ -29,7 +34,7 @@ const val KEY_USERTYPE = "usertype"
 const val KEY_FOREGROUND_ENABLED = "tracking_foreground_location"
 const val LOCATION_LATLNG = "location_latlng"
 const val DRIVER_UID = "driver_uid"
-const val NOTIFICATION_CHANNEL_ID = "channel_1"
+const val NOTIFICATION_CHANNEL_ID = "com.fyp.smartbus.channel"
 const val NOTIFICATION_ID = 123
 
 const val PACKAGE_NAME = "com.fyp.smartbus"
@@ -45,6 +50,22 @@ const val REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE = 34
 /*
     * =========== KOTLIN - EXTENSIONS
 */
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun Context.createNotificationChanel() {
+    val channelName = "SmartBus Channel"
+    val chan = NotificationChannel(
+        NOTIFICATION_CHANNEL_ID,
+        channelName,
+        NotificationManager.IMPORTANCE_DEFAULT
+    )
+    chan.lightColor = Color.BLUE
+    chan.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
+    val manager =
+        (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
+    manager.createNotificationChannel(chan)
+}
+
 fun Activity.switchActivity(targetActivity: Class<*>) {
     val intent = Intent(this, targetActivity)
     startActivity(intent)
@@ -113,11 +134,11 @@ fun Context.isAboveMarshmallow(): Boolean {
 }
 
 fun log(msg: String) {
-    Log.i("Custom Log", "😍😁 ❤❤ ==> $msg")
+    Log.i("ffnet", "😍😁 ❤❤ ==> $msg")
 }
 
 fun errLog(msg: String) {
-    Log.e("Error Log", "❌⚔❌❌❌⛑☠ ==> $msg")
+    Log.e("ffnet", "❌⚔❌❌❌⛑☠ ==> $msg")
 }
 
 fun Fragment.toast(msg: String, length: Int = Toast.LENGTH_SHORT) {

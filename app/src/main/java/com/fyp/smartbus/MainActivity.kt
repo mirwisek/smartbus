@@ -45,7 +45,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     companion object {
         const val REQUEST_PERMISSION_LOCATION = 4251
-        const val REQUEST_CHECK_SETTINGS = 3422
         const val KEY_USER_SAVED_LOCATION = "userLocationSvd"
 
         private val permissions: Array<String> = arrayOf(
@@ -63,21 +62,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var fusedApi: FusedLocationProviderClient
     private lateinit var mMap: GoogleMap
     private lateinit var appBarConfiguration: AppBarConfiguration
-
-    override fun onStart() {
-        super.onStart()
-        var email: String? = null
-        var type: String? = null
-        var username: String? = null
-        sharedPref.apply {
-            email = getString(KEY_EMAIL, null)
-            type = getString(KEY_USERTYPE, null)
-            username = getString(KEY_USERNAME, null)
-        }
-        if(email != null && type != null && username != null) {
-
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -183,7 +167,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                         if (isLocationEnabled())
                             forceLocation()
                         else
-                            enableGPS()
+                            enableGPS(locationRequest)
                     } else {
                         onLocationReceived(location)
                     }
@@ -266,38 +250,4 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
     }
-
-    private fun isLocationEnabled(): Boolean {
-        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-    }
-
-
-    //region Turn On GPS if it's OFF
-    private fun enableGPS(callback: ((LocationSettingsResponse) -> Unit)? = null) {
-        val builder = LocationSettingsRequest.Builder()
-            .addLocationRequest(locationRequest)
-        val client: SettingsClient = LocationServices.getSettingsClient(this)
-        val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
-
-
-        task.addOnSuccessListener { callback?.invoke(it) }
-
-        // This shows the Alert Dialog to display user to enable GPS
-        task.addOnFailureListener { exception ->
-            if (exception is ResolvableApiException) {
-                // Location settings are not satisfied, but this can be fixed
-                // by showing the user a dialog.
-                try {
-                    // Show the dialog by calling startResolutionForResult(),
-                    // and check the result in onActivityResult().
-                    exception.startResolutionForResult(this, REQUEST_CHECK_SETTINGS)
-                } catch (sendEx: IntentSender.SendIntentException) {
-                    // Ignore the error.
-                }
-
-            }
-        }
-    }
-    //endregion
 }

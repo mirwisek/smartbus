@@ -17,7 +17,7 @@ object NetworkFactory {
 
     private const val TIMEOUT = 70L
 
-    const val URL_BASE = "http://192.168.100.3:3006/"
+    const val URL_BASE = "http://192.168.10.3:3006/"
 
 
     //    init {

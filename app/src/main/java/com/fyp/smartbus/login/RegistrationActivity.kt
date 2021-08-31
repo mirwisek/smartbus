@@ -7,11 +7,14 @@ import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.firebase.ui.auth.IdpResponse
+import com.fyp.smartbus.DriverActivity
 import com.fyp.smartbus.MainActivity
 import com.fyp.smartbus.R
 import com.fyp.smartbus.login.viewmodel.FullScreenViewModel
+import com.fyp.smartbus.utils.log
 import com.fyp.smartbus.utils.sharedPref
 import com.fyp.smartbus.utils.switchActivity
+import com.fyp.smartbus.utils.toast
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers.Main
@@ -34,7 +37,10 @@ class RegistrationActivity : AppCompatActivity() {
         vmFullScreen.loadUserDetails()
         vmFullScreen.loggedUser.observe(this) { user ->
             user?.let {
-                switchActivity(MainActivity::class.java)
+                if(it.usertype == "D")
+                    switchActivity(DriverActivity::class.java)
+                else
+                    switchActivity(MainActivity::class.java)
             }
         }
 

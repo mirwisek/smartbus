@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.location.Location
 import android.os.Binder
+import android.os.Build
 import android.os.IBinder
 import android.os.Looper
 import android.util.Log
@@ -19,7 +20,7 @@ import com.google.firebase.auth.FirebaseAuth
 
 
 class DriverLocationService : Service() {
-    val TAG = "DriverLocationService"
+    val TAG = "ffnet::DriverLocationService"
     private var configurationChange = false
 
     private var serviceRunningInForeground = false
@@ -78,9 +79,9 @@ class DriverLocationService : Service() {
                 val locIntent = Intent(ACTION_FOREGROUND_ONLY_LOCATION_BROADCAST)
                 locIntent.putExtra(EXTRA_LOCATION, loc)
 
+                log("Location from service callback: ${loc.toLatLng()}")
                 baseContext.sendBroadcast(locIntent)
                 // TODO: Sent post request to updat elocation
-                log("CUREENT: loc")
             }
         }
 
@@ -132,7 +133,7 @@ class DriverLocationService : Service() {
         // to maintain the 'while-in-use' label.
         // NOTE: If this method is called due to a configuration change in MainActivity,
         // we do nothing.
-        if (!configurationChange && getLocationTrackingPref()) {
+        if (!configurationChange /*&& getLocationTrackingPref()*/) {
 
             val notification = generateNotification()
             startForeground(NOTIFICATION_ID, notification)
@@ -155,25 +156,23 @@ class DriverLocationService : Service() {
     fun subscribeToLocationUpdates() {
         Log.d(TAG, "subscribeToLocationUpdates()")
         // TODO: Chaqnge driverUID to driver email
-        saveLocationTrackingPref( true,
-            currentLocation.toText(), driverUid!!)
+//        saveLocationTrackingPref( true,
+//            currentLocation.toText(), driverUid!!)
 
         // Binding to this service doesn't actually trigger onStartCommand(). That is needed to
         // ensure this Service can be promoted to a foreground service, i.e., the service needs to
         // be officially started (which we do here).
         val service = Intent(applicationContext, DriverLocationService::class.java)
         startService(service)
-//        startService(Intent(applicationContext, DriverLocationService::class.java))
 
         try {
-
             // TODO: Step 1.5, Subscribe to location changes.
             fusedLocationProviderClient.requestLocationUpdates(
-                locationRequest, locationCallback, Looper.myLooper())
+                locationRequest, locationCallback, Looper.myLooper()!!)
 
         } catch (unlikely: SecurityException) {
-            saveLocationTrackingPref( false,
-                currentLocation.toText(), driverUid!!)
+//            saveLocationTrackingPref( false,
+//                currentLocation.toText(), driverUid!!)
             Log.e(TAG, "Lost location permissions. Couldn't remove updates. $unlikely")
         }
     }
@@ -193,14 +192,12 @@ class DriverLocationService : Service() {
                     Log.d(TAG, "Failed to remove Location Callback.")
                 }
             }
-
-
-            saveLocationTrackingPref( false,
-                currentLocation.toText(), driverUid!!)
+//            saveLocationTrackingPref( false,
+//                currentLocation.toText(), driverUid!!)
 
         } catch (unlikely: SecurityException) {
-            saveLocationTrackingPref( true,
-                currentLocation.toText(), driverUid!!)
+//            saveLocationTrackingPref( true,
+//                currentLocation.toText(), driverUid!!)
             Log.e(TAG, "Lost location permissions. Couldn't remove updates. $unlikely")
         }
     }
@@ -221,7 +218,7 @@ class DriverLocationService : Service() {
 
         // TODO: Change to driver acitivty
         // 3. Set up main Intent/Pending Intents for notification.
-        val launchActivityIntent = Intent(this, MainActivity::class.java)
+        val launchActivityIntent = Intent(this, DrivingActivity::class.java)
 
         val cancelIntent = Intent(this, DriverLocationService::class.java)
         cancelIntent.putExtra(EXTRA_CANCEL_LOCATION_TRACKING_FROM_NOTIFICATION, true)
@@ -231,6 +228,10 @@ class DriverLocationService : Service() {
 
         val activityPendingIntent = PendingIntent.getActivity(
             this, 0, launchActivityIntent, 0)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChanel()
+        }
 
         // 4. Build and issue the notification.
         // Notification Channel Id is ignored for Android pre O (26).
@@ -250,11 +251,7 @@ class DriverLocationService : Service() {
 //                R.drawable.ic_bus, getString(R.string.launch_driverActivity),
 //                activityPendingIntent
 //            )
-            .addAction(
-                R.drawable.ic_check,
-                getString(R.string.stop_broadcasting),
-                servicePendingIntent
-            )
+            .addAction(R.drawable.ic_check, getString(R.string.stop_broadcasting), servicePendingIntent)
             .build()
     }
 

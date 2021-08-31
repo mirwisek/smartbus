@@ -23,7 +23,7 @@ class FullScreenViewModel(private val app: Application) :
             val username = getString(KEY_USERNAME, null)
             val usertype = getString(KEY_USERTYPE, null)
             if (email != null && username != null && usertype != null) {
-                _loggedUser.value = User(email, "", username, usertype)
+                _loggedUser.value = User(email, "", username, usertype = usertype)
             }
         }
     }
