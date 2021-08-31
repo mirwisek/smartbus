@@ -9,6 +9,4 @@
     android:background="@color/white"
     tools:context=".login.RegistrationActivity" >
 
-
-
 </FrameLayout>

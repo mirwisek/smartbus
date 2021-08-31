@@ -6,8 +6,8 @@ data class UserResponse(
         var response: User? = null
 )
 
-data class StringResponse(
+data class BusResponse(
         var status: Int,
         var error: String? = null,
-        var response: String? = null
+        var response: Bus? = null
 )

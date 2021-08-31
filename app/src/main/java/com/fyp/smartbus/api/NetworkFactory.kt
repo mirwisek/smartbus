@@ -1,9 +1,7 @@
 package com.fyp.smartbus.api
 
 import android.util.Log
-import android.widget.Toast
 import com.fyp.smartbus.utils.log
-import com.google.gson.Gson
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -13,7 +11,6 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
-import java.util.concurrent.TimeUnit
 
 object NetworkFactory {
 //    lateinit var service: ApiRequest
@@ -80,15 +77,16 @@ object NetworkFactory {
                 addFormDataPart("email", user.email)
                 addFormDataPart("password", user.password)
                 addFormDataPart("username", user.username!!)
+                addFormDataPart("busno", user.busno!!)
                 addFormDataPart("usertype", user.usertype!!)
             }.build()
 
-        log("inside network signup...${requestBody.toString()}")
+//        log("inside network signup...${requestBody.toString()}")
         service.createUser(requestBody).enqueue(object : Callback<UserResponse> {
             override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
                 val body = response.body()
                 if (response.code() == 200) {
-                    log("inside createUser network...${body?.response.toString()}")
+//                    log("inside createUser network...${body?.response.toString()}")
 //                    Toast.makeText(, "Register Successfully", Toast.LENGTH_SHORT).show()
                     onResult(Result.success(body?.response!!))
 //                    onResult(Result.success("Register Successfully."))
@@ -135,5 +133,37 @@ object NetworkFactory {
             }
 
         })
+    }
+
+    fun updateBus(bus: Bus, onResult: (Result<Bus>) -> Unit) {
+        val requestBodyUpdate = MultipartBody.Builder()
+            .setType(MultipartBody.FORM).apply {
+                addFormDataPart("email", bus.email)
+                addFormDataPart("isonline", bus.isonline!!)
+                addFormDataPart("currentloc", bus.currentloc!!)
+                addFormDataPart("busno", bus.busno!!)
+            }.build()
+
+//        log("inside network signup...${requestBody.toString()}")
+        service.updateBus(requestBodyUpdate).enqueue(object : Callback<BusResponse> {
+            override fun onResponse(call: Call<BusResponse>, response: Response<BusResponse>) {
+                val body = response.body()
+                log("inside network login...${response.body()}")
+                if (response.code() == 200) {
+                    onResult(Result.success(body?.response!!))
+                } else if (response.code() == 403) {
+                    onResult(Result.failure(Exception("Email is incorrect/Not Found!!")))
+                } else {
+                    onResult(Result.failure(Exception("Server Error...")))
+                }
+            }
+
+            override fun onFailure(call: Call<BusResponse>, t: Throwable) {
+                log("On failure called network... ${t.message}")
+                onResult(Result.failure(t))
+            }
+
+        })
+//                    onResult(Result.success("Register Successfully."))
     }
 }

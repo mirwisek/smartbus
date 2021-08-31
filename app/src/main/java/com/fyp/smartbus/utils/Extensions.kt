@@ -12,6 +12,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -25,7 +26,22 @@ const val KEY_USERNAME = "username"
 const val KEY_EMAIL = "email"
 const val KEY_PASSWORD = "password"
 const val KEY_USERTYPE = "usertype"
+const val KEY_FOREGROUND_ENABLED = "tracking_foreground_location"
+const val LOCATION_LATLNG = "location_latlng"
+const val DRIVER_UID = "driver_uid"
+const val NOTIFICATION_CHANNEL_ID = "channel_1"
+const val NOTIFICATION_ID = 123
 
+const val PACKAGE_NAME = "com.fyp.smartbus"
+
+const val ACTION_FOREGROUND_ONLY_LOCATION_BROADCAST =
+    "$PACKAGE_NAME.action.FOREGROUND_ONLY_LOCATION_BROADCAST"
+
+const val EXTRA_LOCATION = "$PACKAGE_NAME.extra.LOCATION"
+
+const val EXTRA_CANCEL_LOCATION_TRACKING_FROM_NOTIFICATION =
+    "$PACKAGE_NAME.extra.CANCEL_LOCATION_TRACKING_FROM_NOTIFICATION"
+const val REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE = 34
 /*
     * =========== KOTLIN - EXTENSIONS
 */
@@ -36,8 +52,8 @@ fun Activity.switchActivity(targetActivity: Class<*>) {
     this.finish()
 }
 
-fun Fragment.switchActivity(targetActivity: Class<*>){
-    requireActivity().let {act ->
+fun Fragment.switchActivity(targetActivity: Class<*>) {
+    requireActivity().let { act ->
         val intent = Intent(act, targetActivity)
         startActivity(intent)
         act.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
@@ -127,7 +143,11 @@ fun AppCompatActivity.addFragment(fragment: Fragment, frameId: Int, backStackTag
     }
 }
 
-fun AppCompatActivity.replaceFragment(fragment: Fragment, frameId: Int, backStackTag: String? = null) {
+fun AppCompatActivity.replaceFragment(
+    fragment: Fragment,
+    frameId: Int,
+    backStackTag: String? = null
+) {
     supportFragmentManager.transaction {
         replace(frameId, fragment, backStackTag)
         backStackTag?.let { addToBackStack(fragment.javaClass.name) }
@@ -188,6 +208,26 @@ fun Location?.toText(): String {
         "Unknown location"
     }
 }
+
+fun Context.getLocationTrackingPref(): Boolean =
+    sharedPref.getBoolean(KEY_FOREGROUND_ENABLED, false)
+
+/**
+ * Stores the location updates state in SharedPreferences.
+ * @param requestingLocationUpdates The location updates state.
+ */
+fun Context.saveLocationTrackingPref(
+    requestingLocationUpdates: Boolean,
+    location: String,
+    driverUID: String
+) {
+    sharedPref.edit {
+        putBoolean(KEY_FOREGROUND_ENABLED, requestingLocationUpdates)
+        putString(LOCATION_LATLNG, location)
+        putString(DRIVER_UID, driverUID)
+    }
+}
+
 
 
 

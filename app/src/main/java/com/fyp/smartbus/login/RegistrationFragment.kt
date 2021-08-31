@@ -21,6 +21,8 @@ import com.fyp.smartbus.login.model.Pages
 import com.fyp.smartbus.login.viewmodel.RegisterViewModel
 import com.fyp.smartbus.ui.CheckMaterialButton
 import com.fyp.smartbus.utils.*
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.textfield.TextInputEditText
 import org.w3c.dom.Text
 
@@ -34,7 +36,10 @@ class RegistrationFragment : Fragment() {
     private lateinit var etEmail: TextInputEditText
     private lateinit var etPass: TextInputEditText
     private lateinit var etUserName: TextInputEditText
+    private lateinit var etBus: TextInputEditText
+//    private lateinit var toggleType: MaterialButtonToggleGroup
     private lateinit var btnStudentType: CheckMaterialButton
+    private lateinit var btnDriverType: CheckMaterialButton
     private lateinit var btnRegister: Button
     private lateinit var progressBar: ProgressBar
 //    var tbusertype: String = ""
@@ -61,10 +66,25 @@ class RegistrationFragment : Fragment() {
         etEmail = view.findViewById(R.id.etemailregister)
         etPass = view.findViewById(R.id.etpassregister)
         etUserName = view.findViewById(R.id.etusernameregister)
+        etBus = view.findViewById(R.id.etbus)
+//        toggleType = view.findViewById(R.id.toggleType)
         btnStudentType = view.findViewById(R.id.btnStudent)
+        btnDriverType = view.findViewById(R.id.btnDriver)
         btnRegister = view.findViewById(R.id.btnregister)
 
-        btnStudentType.isSelected = true
+//        btnStudentType.isSelected = true
+
+        btnStudentType.addCustomCheckedChangedListener { button, isChecked ->
+            if (isChecked) {
+                // Student
+                etBus.gone()
+                etBus.isClickable = false
+            } else {
+                // driver
+                etBus.visible()
+                etBus.isClickable
+            }
+        }
 
 //        val tbusertype: String
 
@@ -116,8 +136,7 @@ class RegistrationFragment : Fragment() {
                 vmRegistration.registerDataChanged(
                     etEmail.text.toString(),
                     etPass.text.toString(),
-                    etUserName.text.toString()
-
+                    etUserName.text.toString(),
                 )
             }
         }
@@ -136,6 +155,9 @@ class RegistrationFragment : Fragment() {
                 registerFormState.nameError?.let {
                     etUserName.error = getString(it)
                 }
+//                registerFormState.busError?.let {
+//                    etBus.error = getString(it)
+//                }
 
             })
         etPass.addTextChangedListener(afterTextChangedListener)
@@ -151,10 +173,12 @@ class RegistrationFragment : Fragment() {
             val email = etEmail.text.toString()
             val password = etPass.text.toString()
             val username = etUserName.text.toString()
+            val busno = if (btnStudentType.isChecked) "" else etBus.text.toString()
+//            toast(busno)
 //            val usertype = etUserType.text.toString()
-            val usertype = if(btnStudentType.isChecked) "S" else "D"
-            toast(usertype)
-            vmRegistration.signUp(email, password, username, usertype) { result ->
+            val usertype = if (btnStudentType.isChecked) "S" else "D"
+//            toast(usertype)
+            vmRegistration.signUp(email, password, username, busno, usertype) { result ->
                 result.fold(
                     onSuccess = { u ->
 //                        log("Savving ... $u")
@@ -167,7 +191,14 @@ class RegistrationFragment : Fragment() {
 //                        }
                         hideProgress()
                         toggleFormInput(true)
-                        switchActivity(MainActivity::class.java)
+//
+                        val fragLogin =
+                            activity?.supportFragmentManager?.findFragmentByTag(AdminLoginFragment.TAG)
+                                ?: AdminLoginFragment()
+                        activity?.supportFragmentManager?.beginTransaction()
+                            ?.replace(R.id.container, fragLogin, AdminLoginFragment.TAG)
+                            ?.commit()
+//                        switchActivity(MainActivity::class.java)
                     },
                     onFailure = { e ->
                         toast("ERROR: ${e.localizedMessage}")

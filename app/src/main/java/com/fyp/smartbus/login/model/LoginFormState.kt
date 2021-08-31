@@ -14,5 +14,6 @@ data class RegisterFormState(
     val emailError: Int? = null,
     val passwordError: Int? = null,
     val nameError: Int? = null,
+    val busError: Int? = null,
     val isDataValid: Boolean = false
 )

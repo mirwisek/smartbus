@@ -14,6 +14,7 @@ import android.os.Bundle
 import android.os.Looper
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
@@ -24,9 +25,10 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.firebase.ui.auth.AuthUI
+import com.fyp.smartbus.api.NetworkFactory
+import com.fyp.smartbus.login.AdminLoginFragment
 import com.fyp.smartbus.login.RegistrationActivity
-import com.fyp.smartbus.utils.sharedPref
-import com.fyp.smartbus.utils.toast
+import com.fyp.smartbus.utils.*
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -61,6 +63,21 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var fusedApi: FusedLocationProviderClient
     private lateinit var mMap: GoogleMap
     private lateinit var appBarConfiguration: AppBarConfiguration
+
+    override fun onStart() {
+        super.onStart()
+        var email: String? = null
+        var type: String? = null
+        var username: String? = null
+        sharedPref.apply {
+            email = getString(KEY_EMAIL, null)
+            type = getString(KEY_USERTYPE, null)
+            username = getString(KEY_USERNAME, null)
+        }
+        if(email != null && type != null && username != null) {
+
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -111,25 +128,30 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun signout() {
         // Because Admin login is manual and not based on Firebase Auth
-        val isAdminLogged = sharedPref.getBoolean(KEY_USER_SAVED_LOCATION, false)
-        if (isAdminLogged) {
-            sharedPref.edit()
-                .putBoolean(KEY_USER_SAVED_LOCATION, false)
-                .apply()
-            startLogin()
-            return
-        }
-        AuthUI.getInstance().signOut(this).addOnSuccessListener {
-            startLogin()
-        }.addOnFailureListener {
-            toast("Couldn't sign out")
-        }
+//        val isAdminLogged = sharedPref.getBoolean(KEY_USER_SAVED_LOCATION, false)
+//        if (isAdminLogged) {
+//            sharedPref.edit()
+//                .putBoolean(KEY_USER_SAVED_LOCATION, false)
+//                .apply()
+//            startLogin()
+//            return
+//        }
+        sharedPref.edit().clear().apply()
+        startLogin()
+
+//        AuthUI.getInstance().signOut(this).addOnSuccessListener {
+//            startLogin()
+//        }.addOnFailureListener {
+//            toast("Couldn't sign out")
+//        }
     }
 
     private fun startLogin() {
-        val intent = Intent(this, RegistrationActivity::class.java)
-        startActivity(intent)
-        finish()
+        val fragLogin =
+            supportFragmentManager.findFragmentByTag(AdminLoginFragment.TAG) ?: AdminLoginFragment()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.container, fragLogin, AdminLoginFragment.TAG)
+            .commit()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -141,12 +163,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
 
         fusedApi = LocationServices.getFusedLocationProviderClient(this)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!hasPermissions(this, *permissions)) {
-                requestPermissions()
-            } else {
-                onPermissionGranted()
-            }
+        if (!hasPermissions(this, *permissions)) {
+            requestPermissions()
+        } else {
+            onPermissionGranted()
         }
     }
 
@@ -222,6 +242,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             REQUEST_PERMISSION_LOCATION -> {
                 if (!(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {

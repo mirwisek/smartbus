@@ -23,8 +23,15 @@ class RegisterViewModel(private val app: Application) : AndroidViewModel(app) {
 //    private val _registerResult = MutableLiveData<UserResult<LoggedInUserView>>()
 //    val registerResult: LiveData<UserResult<LoggedInUserView>> = _registerResult
 
-    fun signUp(email: String, password: String, username: String, usertype:String, onResult: (Result<User>) -> Unit) {
-        NetworkFactory.signup(User(email, password, username, usertype), onResult)
+    fun signUp(
+        email: String,
+        password: String,
+        username: String,
+        busno: String,
+        usertype: String,
+        onResult: (Result<User>) -> Unit
+    ) {
+        NetworkFactory.signup(User(email, password, username, busno ,usertype), onResult)
     }
 
 //    fun register(user: LoggedInUser) {
@@ -59,7 +66,7 @@ class RegisterViewModel(private val app: Application) : AndroidViewModel(app) {
             _registerForm.value =
                 RegisterFormState(nameError = R.string.invalid_name)
 //            Toast.makeText(getApplication(), "name:", Toast.LENGTH_SHORT).show()
-        }else {
+        } else {
             _registerForm.value =
                 RegisterFormState(isDataValid = true)
 //            Toast.makeText(getApplication(), "datavalid:", Toast.LENGTH_SHORT).show()
@@ -83,4 +90,8 @@ class RegisterViewModel(private val app: Application) : AndroidViewModel(app) {
     private fun isNameValid(name: String): Boolean {
         return name.length > 2
     }
+
+//    private fun isBusNoValid(busno: String): Boolean {
+//        return busno.length > 2
+//    }
 }

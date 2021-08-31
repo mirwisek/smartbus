@@ -20,9 +20,9 @@ class RegistrationActivity : AppCompatActivity() {
 
     companion object {
         const val RC_SIGN_IN = 1110
-        const val KEY_IS_NEW_USER = "isNewUser"
-        const val KEY_USER_TYPE = "userType"
-        const val KEY_IS_ADMIN_LOGGED_IN = "adminLogin"
+//        const val KEY_IS_NEW_USER = "isNewUser"
+//        const val KEY_USER_TYPE = "userType"
+//        const val KEY_IS_ADMIN_LOGGED_IN = "adminLogin"
     }
 
     lateinit var vmFullScreen: FullScreenViewModel
