@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.fyp.smartbus.R
+import com.fyp.smartbus.api.ApiHelper
 import com.fyp.smartbus.api.NetworkFactory
 import com.fyp.smartbus.api.User
 import com.fyp.smartbus.login.model.LoginFormState
@@ -18,7 +19,7 @@ class LoginViewModel(private val app: Application) : AndroidViewModel(app) {
 
 
     fun login(email: String, password: String, onResult: (Result<User>) -> Unit) {
-        NetworkFactory.login(User(email, password), onResult)
+        ApiHelper.login(User(email, password), onResult)
     }
 
 //    fun forgetPassword(email: String): LiveData<UserResult<Boolean>> {

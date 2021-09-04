@@ -14,9 +14,12 @@ import android.os.IBinder
 import android.os.Looper
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.fyp.smartbus.api.ApiHelper
+import com.fyp.smartbus.api.Bus
 import com.fyp.smartbus.api.User
 import com.fyp.smartbus.utils.*
 import com.google.android.gms.location.*
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 
 
@@ -48,6 +51,7 @@ class DriverLocationService : Service() {
     private var currentLocation: Location? = null
     private var prevLocation: Location? = null
     private var driver: User? = null
+
 
 
     private lateinit var notificationManager: NotificationManager
@@ -89,10 +93,30 @@ class DriverLocationService : Service() {
                     intent.putExtra(EXTRA_LOCATION, loc)
                     sendBroadcast(intent)
                 }
-                // TODO: Sent post request to update location
+
+                // TODO: [Zain - When other errors fixed then uncomment the following function]
+                updateLocationDatabase(loc.toLatLng())
             }
         }
 
+    }
+
+    private fun updateLocationDatabase(loc: LatLng, isOnline: Boolean = true, cb: (() -> Unit)? = null) {
+        driver?.let { u ->
+            val bus = Bus(u.email, currentloc = loc.string())
+            ApiHelper.updateBus(bus) { result ->
+                result.fold(
+                    onSuccess = {
+                        log("Location updated success")
+                        cb?.invoke()
+                    },
+                    onFailure = {
+                        log("Location failed due to ${it.message}")
+                        cb?.invoke()
+                    }
+                )
+            }
+        }
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
@@ -102,11 +126,12 @@ class DriverLocationService : Service() {
 
         if (cancelLocationTrackingFromNotification) {
             unsubscribeToLocationUpdates()
-//            FirestoreUtils.goOffline(driverUid!!)
-            // TODO: TUrn off bus status
-            toast("Going Offline...")
 
-            stopSelf()
+            // TODO: [Zain - Uncomment this finally, turn off isonline && clear locations, should set location to null when isonline turned off]
+            updateLocationDatabase(LatLng(0.0, 0.0), isOnline = false) {
+                toast("Going Offline...")
+                stopSelf()
+            }
         }
         // Tells the system not to recreate the service after it's been killed.
         return START_NOT_STICKY

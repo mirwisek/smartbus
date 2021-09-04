@@ -191,6 +191,10 @@ fun Location.toLatLng(): LatLng {
     return LatLng(latitude, longitude)
 }
 
+fun Location.string(): String {
+    return "$latitude,$longitude"
+}
+
 fun GeoPoint.toLatLng(): LatLng {
     return LatLng(latitude, longitude)
 }

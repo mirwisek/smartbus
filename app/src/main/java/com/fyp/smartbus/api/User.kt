@@ -16,7 +16,7 @@ data class User (
 )
 data class Bus(
         var email: String,
-        var isonline : String? = null,
+        var isonline : Boolean? = null,
         var currentloc : String? = null,
         var busno: String? = null
 )

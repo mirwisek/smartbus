@@ -1,18 +1,14 @@
 package com.fyp.smartbus.login.viewmodel
 
 import android.app.Application
+import android.util.Patterns
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import android.util.Patterns
-import android.widget.Toast
-import androidx.lifecycle.AndroidViewModel
-
 import com.fyp.smartbus.R
-import com.fyp.smartbus.api.NetworkFactory
+import com.fyp.smartbus.api.ApiHelper
 import com.fyp.smartbus.api.User
-import com.fyp.smartbus.login.model.LoginFormState
 import com.fyp.smartbus.login.model.RegisterFormState
-import com.fyp.smartbus.utils.log
 
 class RegisterViewModel(private val app: Application) : AndroidViewModel(app) {
 
@@ -31,7 +27,7 @@ class RegisterViewModel(private val app: Application) : AndroidViewModel(app) {
         usertype: String,
         onResult: (Result<User>) -> Unit
     ) {
-        NetworkFactory.signup(User(email, password, username, busno ,usertype), onResult)
+        ApiHelper.signup(User(email, password, username, busno ,usertype), onResult)
     }
 
 //    fun register(user: LoggedInUser) {
