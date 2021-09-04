@@ -14,6 +14,7 @@ import android.os.IBinder
 import android.os.Looper
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.fyp.smartbus.api.User
 import com.fyp.smartbus.utils.*
 import com.google.android.gms.location.*
 import com.google.firebase.auth.FirebaseAuth
@@ -46,14 +47,21 @@ class DriverLocationService : Service() {
     // last location to create a Notification if the user navigates away from the app.
     private var currentLocation: Location? = null
     private var prevLocation: Location? = null
-    private var driverUid: String? = null
+    private var driver: User? = null
 
 
     private lateinit var notificationManager: NotificationManager
 
     override fun onCreate() {
-//        driverUid = FirebaseAuth.getInstance().currentUser?.uid
-        Log.d(TAG, "onCreate() $driverUid")
+
+        // Initialize driver here for location update retrofit requests
+        applicationContext.sharedPref.apply {
+            val email = getString(KEY_EMAIL, null)
+            val username = getString(KEY_USERNAME, null)
+            if (email != null && username != null) {
+                driver = User(email, "", username)
+            }
+        }
 
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -67,21 +75,21 @@ class DriverLocationService : Service() {
         locationRequest = MapsUtils.getLocationRequest()
 
         locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult?) {
+            override fun onLocationResult(locationResult: LocationResult) {
                 super.onLocationResult(locationResult)
 
-                val location = locationResult?.locations ?: return
+                val location = locationResult.locations ?: return
                 val loc = location[0]
                 prevLocation = currentLocation
                 currentLocation = loc // current Location
 
                 // Send broadcast, for DriverActivity to update UI
-                val locIntent = Intent(ACTION_FOREGROUND_ONLY_LOCATION_BROADCAST)
-                locIntent.putExtra(EXTRA_LOCATION, loc)
-
-                log("Location from service callback: ${loc.toLatLng()}")
-                baseContext.sendBroadcast(locIntent)
-                // TODO: Sent post request to updat elocation
+                Intent().also { intent ->
+                    intent.action = ACTION_LOCATION_BROADCAST
+                    intent.putExtra(EXTRA_LOCATION, loc)
+                    sendBroadcast(intent)
+                }
+                // TODO: Sent post request to update location
             }
         }
 
@@ -104,7 +112,7 @@ class DriverLocationService : Service() {
         return START_NOT_STICKY
     }
 
-    override fun onBind(intent: Intent): IBinder? {
+    override fun onBind(intent: Intent): IBinder {
         Log.d(TAG, "onBind()")
 
         // MainActivity (client) comes into foreground and binds to service, so the service can
@@ -133,7 +141,7 @@ class DriverLocationService : Service() {
         // to maintain the 'while-in-use' label.
         // NOTE: If this method is called due to a configuration change in MainActivity,
         // we do nothing.
-        if (!configurationChange /*&& getLocationTrackingPref()*/) {
+        if (!configurationChange) {
 
             val notification = generateNotification()
             startForeground(NOTIFICATION_ID, notification)
@@ -171,8 +179,6 @@ class DriverLocationService : Service() {
                 locationRequest, locationCallback, Looper.myLooper()!!)
 
         } catch (unlikely: SecurityException) {
-//            saveLocationTrackingPref( false,
-//                currentLocation.toText(), driverUid!!)
             Log.e(TAG, "Lost location permissions. Couldn't remove updates. $unlikely")
         }
     }

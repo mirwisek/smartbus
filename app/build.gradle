@@ -15,6 +15,10 @@ android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
+    buildFeatures {
+        viewBinding true
+    }
+
     signingConfigs {
         release {
             keyAlias keystoreProperties['keyAlias']
@@ -30,8 +34,6 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -59,8 +61,7 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.navigation:navigation-fragment:2.3.5'
-    implementation 'androidx.navigation:navigation-ui:2.3.5'
+
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
     def lifecycle_version = "2.3.1"
@@ -82,7 +83,7 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:4.9.1"
 
     implementation 'com.google.android.material:material:<version>'
-//    implementation 'com.google.android.material.button.MaterialButton'
+
     //FireStore
     implementation 'com.google.firebase:firebase-firestore-ktx:23.0.3'
 

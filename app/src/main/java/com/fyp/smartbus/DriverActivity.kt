@@ -1,30 +1,20 @@
 package com.fyp.smartbus
 
-import android.Manifest
-import android.annotation.SuppressLint
-import android.content.*
+import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Location
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.IBinder
-import android.os.Looper
 import android.provider.Settings
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
-import androidx.lifecycle.ViewModelProvider
-import com.fyp.smartbus.utils.*
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
+import androidx.appcompat.app.AppCompatActivity
+import com.fyp.smartbus.utils.MapsUtils
+import com.fyp.smartbus.utils.REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 
+/**
+ * Driver's main screen
+ */
 class DriverActivity : AppCompatActivity() {
 
     private lateinit var container: ViewGroup
