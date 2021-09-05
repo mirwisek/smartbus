@@ -7,13 +7,13 @@ import retrofit2.http.*
 
 interface ApiRequest {
 
-    @POST("/api/users/createuser")
+    @POST("/createuser")
     fun createUser(@Body user: RequestBody): Call<UserResponse>
 
-    @PATCH("/api/users/updatebus")
-    fun updateBus(@Body user: MultipartBody): Call<BusResponse>
+    @PATCH("/updatebus")
+    fun updateBus(@Body user: RequestBody): Call<BusResponse>
 
-    @POST("/api/users/login")
+    @POST("/login")
     fun loginUser(@Body user: RequestBody) : Call<UserResponse>
 
 }
