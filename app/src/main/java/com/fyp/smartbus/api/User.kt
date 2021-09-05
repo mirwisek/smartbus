@@ -19,6 +19,14 @@ data class Bus(
         var isonline : Boolean? = null,
         var currentloc : String? = null
 )
+
+data class BusOnline(
+        var email: String,
+        var currentloc : String? = null,
+        var lastloc : String? = null,
+        var busno : String? = null,
+        var username: String?=null
+)
 //{
 //
 //    companion object {

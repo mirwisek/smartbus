@@ -11,3 +11,9 @@ data class BusResponse(
         var error: String? = null,
         var response: Bus? = null
 )
+
+data class BusOnlineResponse(
+        var status: Int,
+        var error: String? = null,
+        var response: BusOnline? = null
+)

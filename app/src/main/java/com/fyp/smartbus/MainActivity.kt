@@ -25,7 +25,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.firebase.ui.auth.AuthUI
-import com.fyp.smartbus.api.NetworkFactory
+import com.fyp.smartbus.api.*
 import com.fyp.smartbus.login.AdminLoginFragment
 import com.fyp.smartbus.login.RegistrationActivity
 import com.fyp.smartbus.utils.*
@@ -62,6 +62,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var fusedApi: FusedLocationProviderClient
     private lateinit var mMap: GoogleMap
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private var buses: BusOnline? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -220,6 +221,24 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         permissions.all {
             ActivityCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
         }
+
+    //Todo : Mirwise get all online buses
+
+    private fun getOnlineBuses() {
+        buses?.let { u ->
+//            val bus = BusOnline()
+            ApiHelper.getBusOnline() { result ->
+                result.fold(
+                    onSuccess = {
+                        //show results on map
+                    },
+                    onFailure = {
+                        toast("Failed: ${it.message}")
+                    }
+                )
+            }
+        }
+    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,

@@ -44,8 +44,6 @@ object ApiHelper {
     }
 
 
-
-
     fun login(user: User, onResult: (Result<User>) -> Unit) {
         val requestBody = MultipartBody.Builder()
             .setType(MultipartBody.FORM).apply {
@@ -80,7 +78,7 @@ object ApiHelper {
                 addFormDataPart("email", bus.email)
 //                log("isonline: ${bus.isonline}")
                 // TODO: [Zain - Fix boolean value send to retrofit]
-                addFormDataPart("isonline", (if(bus.isonline!!) 1 else 0).toString() )
+                addFormDataPart("isonline", (if (bus.isonline!!) 1 else 0).toString())
                 addFormDataPart("currentloc", bus.currentloc!!)
             }.build()
 
@@ -105,6 +103,36 @@ object ApiHelper {
 
         })
 //                    onResult(Result.success("Register Successfully."))
+    }
+
+
+    fun getBusOnline(onResult: (Result<BusOnline>) -> Unit) {
+        val requestBody = MultipartBody.Builder()
+            .build()
+        log("Server network...${NetworkFactory.service.toString()}")
+        NetworkFactory.service.getOnlineBus(requestBody)
+            .enqueue(object : Callback<BusOnlineResponse> {
+                override fun onResponse(
+                    call: Call<BusOnlineResponse>,
+                    response: Response<BusOnlineResponse>
+                ) {
+                    val body = response.body()
+                    log("inside network login...${response.body()}")
+                    if (response.code() == 200 && body != null) {
+                        onResult(Result.success(body.response!!))
+                    } else if (response.code() == 403) {
+                        onResult(Result.failure(Exception("Email/Password is incorrect!!")))
+                    } else {
+                        onResult(Result.failure(Exception("Server Error...")))
+                    }
+                }
+
+                override fun onFailure(call: Call<BusOnlineResponse>, t: Throwable) {
+                    log("On failure called network... ${t.message}")
+                    onResult(Result.failure(t))
+                }
+
+            })
     }
 
 }

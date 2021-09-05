@@ -16,4 +16,7 @@ interface ApiRequest {
     @POST("/login")
     fun loginUser(@Body user: RequestBody) : Call<UserResponse>
 
+    @GET("/getbusdetail")
+    fun getOnlineBus(@Body bus : RequestBody) : Call<BusOnlineResponse>
+
 }
