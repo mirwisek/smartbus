@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.fyp.privacyguard.login.viewmodel.LoginViewModel
+import com.fyp.smartbus.DriverActivity
 import com.fyp.smartbus.MainActivity
 import com.fyp.smartbus.R
 import com.fyp.smartbus.utils.*
@@ -139,7 +140,7 @@ class AdminLoginFragment : Fragment() {
                             }
                             hideProgress()
                             toggleFormInput(true)
-                            switchActivity(MainActivity::class.java)
+                            switchActivity(DriverActivity::class.java)
                         },
                         onFailure = { e ->
                             toast("ERROR: ${e.localizedMessage}")

@@ -78,10 +78,10 @@ object ApiHelper {
         val requestBodyUpdate = MultipartBody.Builder()
             .setType(MultipartBody.FORM).apply {
                 addFormDataPart("email", bus.email)
+//                log("isonline: ${bus.isonline}")
                 // TODO: [Zain - Fix boolean value send to retrofit]
                 addFormDataPart("isonline", (if(bus.isonline!!) 1 else 0).toString() )
                 addFormDataPart("currentloc", bus.currentloc!!)
-                addFormDataPart("busno", bus.busno!!)
             }.build()
 
 //        log("inside network signup...${requestBody.toString()}")

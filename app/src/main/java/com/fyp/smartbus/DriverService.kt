@@ -104,7 +104,7 @@ class DriverLocationService : Service() {
 
     private fun updateLocationDatabase(loc: LatLng, isOnline: Boolean = true, cb: (() -> Unit)? = null) {
         driver?.let { u ->
-            val bus = Bus(u.email, currentloc = loc.string())
+            val bus = Bus(u.email, currentloc = loc.string(), isonline = isOnline)
             ApiHelper.updateBus(bus) { result ->
                 result.fold(
                     onSuccess = {
@@ -128,7 +128,7 @@ class DriverLocationService : Service() {
         if (cancelLocationTrackingFromNotification) {
             unsubscribeToLocationUpdates()
 
-            // TODO: [Zain - Uncomment this finally, turn off isonline && clear locations, should set location to null when isonline turned off]
+            //  TODO: [Zain - Uncomment this finally, turn off isonline && clear locations, should set location to null when isonline turned off]
             updateLocationDatabase(LatLng(0.0, 0.0), isOnline = false) {
                 sharedPref.edit(true) {
                     putBoolean(KEY_IS_DRIVING, false)
