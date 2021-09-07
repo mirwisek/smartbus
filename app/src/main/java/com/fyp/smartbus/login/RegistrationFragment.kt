@@ -1,6 +1,5 @@
 package com.fyp.smartbus.login
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,22 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.content.edit
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.fyp.privacyguard.login.viewmodel.LoginViewModel
-import com.fyp.smartbus.MainActivity
 import com.fyp.smartbus.R
-import com.fyp.smartbus.login.model.LoggedInUserView
-import com.fyp.smartbus.login.model.Pages
 import com.fyp.smartbus.login.viewmodel.RegisterViewModel
 import com.fyp.smartbus.ui.CheckMaterialButton
 import com.fyp.smartbus.utils.*
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.textfield.TextInputEditText
-import org.w3c.dom.Text
 
 class RegistrationFragment : Fragment() {
 
@@ -95,7 +85,7 @@ class RegistrationFragment : Fragment() {
 //        }
 
 
-        progressBar = view.findViewById(R.id.loadingregister)
+        progressBar = view.findViewById(R.id.progress)
 
 
 //        val emailtext = etEmail.text.toString()
@@ -104,7 +94,7 @@ class RegistrationFragment : Fragment() {
 //        val usertypetext = etUserType.text.toString()
 
 
-        view.findViewById<TextView>(R.id.btnsignin).setOnClickListener {
+        view.findViewById<TextView>(R.id.tvSignIn).setOnClickListener {
 
             val fragLogin =
                 activity?.supportFragmentManager?.findFragmentByTag(AdminLoginFragment.TAG)
