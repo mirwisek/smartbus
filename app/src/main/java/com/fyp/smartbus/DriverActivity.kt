@@ -54,6 +54,21 @@ class DriverActivity : AppCompatActivity() {
         }
 
         vmDriver.isDriving.observe(this) { isDriving ->
+            if(isDriving) {
+                binding.animBus.apply {
+                    visible()
+                    binding.animLocation.invisible()
+                    binding.animLocation.pauseAnimation()
+                    playAnimation()
+                }
+            } else {
+                binding.animLocation.apply {
+                    visible()
+                    binding.animBus.invisible()
+                    binding.animBus.pauseAnimation()
+                    playAnimation()
+                }
+            }
             updateDrivingStatus(isDriving)
         }
 
@@ -170,7 +185,6 @@ class DriverActivity : AppCompatActivity() {
         override fun onReceive(context: Context, intent: Intent) {
             val isDriving = intent.getBooleanExtra(EXTRA_IS_DRIVING, false)
             vmDriver.isDriving.postValue(isDriving)
-            log("Driving turned: $isDriving")
         }
     }
 }
