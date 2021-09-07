@@ -37,11 +37,7 @@ class DriverActivity : AppCompatActivity() {
             if(!vmDriver.isDriving.value!!) {
                 // Check location permission
                 if (hasLocationPermission()) {
-                    // 1.2 Check GPS is on
-                    if (isLocationEnabled())
-                        startDriving()
-                    else
-                        enableGPS(MapsUtils.getLocationRequest())
+                    onPermissionGrantedAction()
                 } else {
                     requestForegroundPermissions()
                 }
@@ -62,6 +58,14 @@ class DriverActivity : AppCompatActivity() {
         }
 
         locationServiceStopReceiver = LocationServiceToggleReceiver()
+    }
+
+    private fun onPermissionGrantedAction() {
+        // 1.2 Check GPS is on
+        if (isLocationEnabled())
+            startDriving()
+        else
+            enableGPS(MapsUtils.getLocationRequest())
     }
 
     private fun updateDrivingStatus(isDriving: Boolean) {
@@ -119,7 +123,7 @@ class DriverActivity : AppCompatActivity() {
 
                 grantResults[0] == PackageManager.PERMISSION_GRANTED -> {
                     // Permission was granted.
-                    // TODO: Change
+                    onPermissionGrantedAction()
 
                 } else -> {
 
