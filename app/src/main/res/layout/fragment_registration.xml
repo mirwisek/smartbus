@@ -173,44 +173,18 @@
 
     </com.google.android.material.button.MaterialButtonToggleGroup>
 
-<!--    <TextView-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="30dp"-->
-<!--        android:layout_marginRight="20dp"-->
-<!--        android:hint="select your category:"-->
-<!--        android:textSize="18dp"-->
-<!--        android:textStyle="bold"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/tbstudent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/tlnameregister" />-->
-
-<!--    <ToggleButton-->
-<!--        android:id="@+id/tbstudent"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="20dp"-->
-<!--        android:layout_marginRight="50dp"-->
-<!--        android:background="@color/colorPrimary"-->
-<!--        android:checked="true"-->
-<!--        android:textColor="@color/white"-->
-<!--        android:textOff="Driver"-->
-<!--        android:textOn="Student"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/tlnameregister" />-->
-
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnregister"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="30dp"
         android:padding="15dp"
         android:text="Register"
         app:backgroundTint="@color/colorPrimaryDark"
         app:cornerRadius="30dp"
         app:layout_constraintStart_toStartOf="@id/progress"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/toggleType"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintTop_toBottomOf="@id/toggleType" />
 
