@@ -11,7 +11,7 @@ interface ApiRequest {
     fun createUser(@Body user: RequestBody): Call<UserResponse>
 
     @PATCH("/updatebus")
-    fun updateBus(@Body user: MultipartBody): Call<BusResponse>
+    fun updateBus(@Body user: MultipartBody): Call<StringResponse>
 
     @POST("/login")
     fun loginUser(@Body user: RequestBody) : Call<UserResponse>

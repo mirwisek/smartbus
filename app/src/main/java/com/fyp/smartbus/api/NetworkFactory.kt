@@ -11,9 +11,9 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
+import java.util.concurrent.TimeUnit
 
 object NetworkFactory {
-//    lateinit var service: ApiRequest
 
     private const val TIMEOUT = 70L
 
@@ -33,7 +33,7 @@ object NetworkFactory {
 
     private val okhttp = OkHttpClient.Builder()
         .addInterceptor(logInterceptor)
-//        .readTimeout(TIMEOUT, TimeUnit.SECONDS)
+        .readTimeout(TIMEOUT, TimeUnit.SECONDS)
         .build()
 //
 //        val gson = GsonBuilder()

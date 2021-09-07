@@ -5,16 +5,15 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
-import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
+import androidx.lifecycle.ViewModelProvider
 import com.fyp.smartbus.databinding.ActivityDriverBinding
+import com.fyp.smartbus.login.viewmodel.DriverViewModel
 import com.fyp.smartbus.utils.*
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 
 /**
@@ -23,27 +22,57 @@ import com.google.android.material.snackbar.Snackbar
 class DriverActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDriverBinding
-    private var locationStopReceiver: LocationStoppedReceiver? = null
+    private var locationServiceStopReceiver: LocationServiceToggleReceiver? = null
+    private lateinit var vmDriver: DriverViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDriverBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
+        vmDriver = ViewModelProvider(this).get(DriverViewModel::class.java)
+
         binding.fabDriving.setOnClickListener {
-            // 1.1 Check location permission
-            if (hasLocationPermission()) {
-                // 1.2 Check GPS is on
-                if (isLocationEnabled())
-                    startDriving()
-                else
-                    enableGPS(MapsUtils.getLocationRequest())
+            if(!vmDriver.isDriving.value!!) {
+                // Check location permission
+                if (hasLocationPermission()) {
+                    // 1.2 Check GPS is on
+                    if (isLocationEnabled())
+                        startDriving()
+                    else
+                        enableGPS(MapsUtils.getLocationRequest())
+                } else {
+                    requestForegroundPermissions()
+                }
             } else {
-                requestForegroundPermissions()
+                binding.fabDriving.isEnabled = false
+                binding.fabDriving.text = getString(R.string.stopping)
+                // Stop Location tracking service
+                Intent(this, DriverLocationService::class.java).also { intent ->
+                    intent.putExtra(EXTRA_STOP_LOCATION_TRACKING, true)
+                    startService(intent)
+                }
+
             }
         }
 
-        locationStopReceiver = LocationStoppedReceiver()
+        vmDriver.isDriving.observe(this) { isDriving ->
+            updateDrivingStatus(isDriving)
+        }
+
+        locationServiceStopReceiver = LocationServiceToggleReceiver()
+    }
+
+    private fun updateDrivingStatus(isDriving: Boolean) {
+        log("Status updated $isDriving")
+        if(isDriving) {
+            binding.fabDriving.text = getString(R.string.stop_driving)
+        } else {
+            binding.fabDriving.text = getString(R.string.start_driving)
+            // After network request and service stopped then enable button
+            binding.fabDriving.isEnabled = true
+        }
     }
 
     private fun startDriving() {
@@ -84,7 +113,7 @@ class DriverActivity : AppCompatActivity() {
         when (requestCode) {
             REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE -> when {
                 grantResults.isEmpty() ->
-                    // If user interaction was interrupted, the permission request
+                    // If user interaction was interrupted, thLocation failed due to timeoute permission request
                     // is cancelled and you receive empty arrays.
                     println("ffnet: User interaction was cancelled.")
 
@@ -116,29 +145,28 @@ class DriverActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        locationStopReceiver?.let {
-            registerReceiver(it, IntentFilter(ACTION_STOP_LOCATION))
+        locationServiceStopReceiver?.let {
+            registerReceiver(it, IntentFilter(ACTION_LOCTION_TOGGLED))
         }
         // IF already location service is ON then the button shouldn't appear
-        val isDriving = sharedPref.getBoolean(KEY_IS_DRIVING, false)
-        if(isDriving)
-            binding.fabDriving.invisible()
-        else
-            binding.fabDriving.visible()
+        vmDriver.isDriving.postValue((application as SmartBusApp).isDrivingServiceRunning)
+//        val isDriving = sharedPref.getBoolean(KEY_IS_DRIVING, false)
+//        vmDriver.isDriving.postValue(isDriving)
     }
 
     override fun onPause() {
-        locationStopReceiver?.let {
+        locationServiceStopReceiver?.let {
             unregisterReceiver(it)
         }
         super.onPause()
     }
 
-    private inner class LocationStoppedReceiver : BroadcastReceiver() {
+    private inner class LocationServiceToggleReceiver : BroadcastReceiver() {
 
         override fun onReceive(context: Context, intent: Intent) {
-            binding.fabDriving.visible()
-            log("Driving visible")
+            val isDriving = intent.getBooleanExtra(EXTRA_IS_DRIVING, false)
+            vmDriver.isDriving.postValue(isDriving)
+            log("Driving turned: $isDriving")
         }
     }
 }
