@@ -31,6 +31,7 @@ const val KEY_USERNAME = "username"
 const val KEY_EMAIL = "email"
 const val KEY_PASSWORD = "password"
 const val KEY_USERTYPE = "usertype"
+const val KEY_IS_DRIVING = "isDrivingLocationOn"
 const val KEY_FOREGROUND_ENABLED = "tracking_foreground_location"
 const val LOCATION_LATLNG = "location_latlng"
 const val DRIVER_UID = "driver_uid"
@@ -40,6 +41,7 @@ const val NOTIFICATION_ID = 123
 const val PACKAGE_NAME = "com.fyp.smartbus"
 
 const val ACTION_LOCATION_BROADCAST = "$PACKAGE_NAME.location.broadcast"
+const val ACTION_STOP_LOCATION = "$PACKAGE_NAME.location.stop"
 
 const val EXTRA_LOCATION = "$PACKAGE_NAME.extra.LOCATION"
 

@@ -1,14 +1,19 @@
 package com.fyp.smartbus
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import com.fyp.smartbus.utils.MapsUtils
-import com.fyp.smartbus.utils.REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE
+import androidx.core.content.edit
+import com.fyp.smartbus.databinding.ActivityDriverBinding
+import com.fyp.smartbus.utils.*
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 
@@ -17,16 +22,15 @@ import com.google.android.material.snackbar.Snackbar
  */
 class DriverActivity : AppCompatActivity() {
 
-    private lateinit var container: ViewGroup
+    private lateinit var binding: ActivityDriverBinding
+    private var locationStopReceiver: LocationStoppedReceiver? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_driver)
+        binding = ActivityDriverBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        container = findViewById(R.id.container)
-        val fab = findViewById<ExtendedFloatingActionButton>(R.id.fabDriving)
-
-        fab.setOnClickListener {
+        binding.fabDriving.setOnClickListener {
             // 1.1 Check location permission
             if (hasLocationPermission()) {
                 // 1.2 Check GPS is on
@@ -38,9 +42,14 @@ class DriverActivity : AppCompatActivity() {
                 requestForegroundPermissions()
             }
         }
+
+        locationStopReceiver = LocationStoppedReceiver()
     }
 
     private fun startDriving() {
+        sharedPref.edit(true) {
+            putBoolean(KEY_IS_DRIVING, true)
+        }
         val intent = Intent(this, DrivingActivity::class.java)
         startActivity(intent)
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
@@ -53,7 +62,7 @@ class DriverActivity : AppCompatActivity() {
         // additional rationale.
         if (provideRationale) {
             Snackbar.make(
-                container,
+                binding.container,
                 R.string.permission_rationale,
                 Snackbar.LENGTH_LONG
             )
@@ -70,7 +79,7 @@ class DriverActivity : AppCompatActivity() {
         permissions: Array<String>,
         grantResults: IntArray
     ) {
-        println("ffnet: onRequestPermissionResult")
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         when (requestCode) {
             REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE -> when {
@@ -86,7 +95,7 @@ class DriverActivity : AppCompatActivity() {
                 } else -> {
 
                     Snackbar.make(
-                        container,
+                        binding.container,
                         R.string.permission_denied_explanation,
                         Snackbar.LENGTH_LONG
                     )
@@ -102,6 +111,34 @@ class DriverActivity : AppCompatActivity() {
                         .show()
                 }
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        locationStopReceiver?.let {
+            registerReceiver(it, IntentFilter(ACTION_STOP_LOCATION))
+        }
+        // IF already location service is ON then the button shouldn't appear
+        val isDriving = sharedPref.getBoolean(KEY_IS_DRIVING, false)
+        if(isDriving)
+            binding.fabDriving.invisible()
+        else
+            binding.fabDriving.visible()
+    }
+
+    override fun onPause() {
+        locationStopReceiver?.let {
+            unregisterReceiver(it)
+        }
+        super.onPause()
+    }
+
+    private inner class LocationStoppedReceiver : BroadcastReceiver() {
+
+        override fun onReceive(context: Context, intent: Intent) {
+            binding.fabDriving.visible()
+            log("Driving visible")
         }
     }
 }

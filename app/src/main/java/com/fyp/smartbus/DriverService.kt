@@ -14,6 +14,7 @@ import android.os.IBinder
 import android.os.Looper
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.core.content.edit
 import com.fyp.smartbus.api.ApiHelper
 import com.fyp.smartbus.api.Bus
 import com.fyp.smartbus.api.User
@@ -129,6 +130,12 @@ class DriverLocationService : Service() {
 
             // TODO: [Zain - Uncomment this finally, turn off isonline && clear locations, should set location to null when isonline turned off]
             updateLocationDatabase(LatLng(0.0, 0.0), isOnline = false) {
+                sharedPref.edit(true) {
+                    putBoolean(KEY_IS_DRIVING, false)
+                }
+                Intent(ACTION_STOP_LOCATION).also { intent ->
+                    sendBroadcast(intent)
+                }
                 toast("Going Offline...")
                 stopSelf()
             }
