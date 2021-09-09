@@ -5,49 +5,39 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.location.Location
-import android.location.LocationManager
-import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.firebase.ui.auth.AuthUI
-import com.fyp.smartbus.api.NetworkFactory
 import com.fyp.smartbus.login.AdminLoginFragment
-import com.fyp.smartbus.login.RegistrationActivity
-import com.fyp.smartbus.utils.*
-import com.google.android.gms.common.api.ResolvableApiException
+import com.fyp.smartbus.login.viewmodel.BusListViewModel
+import com.fyp.smartbus.utils.log
+import com.fyp.smartbus.utils.sharedPref
+import com.fyp.smartbus.utils.toast
 import com.google.android.gms.location.*
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.tasks.Task
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.auth.FirebaseAuth
+import java.util.*
 
-class MainActivity : AppCompatActivity(), OnMapReadyCallback {
+class MainActivity : AppCompatActivity() {
 
     companion object {
         const val REQUEST_PERMISSION_LOCATION = 4251
         const val KEY_USER_SAVED_LOCATION = "userLocationSvd"
 
-        private val permissions: Array<String> = arrayOf(
+        val permissions: Array<String> = arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION
         )
@@ -59,9 +49,17 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private lateinit var fusedApi: FusedLocationProviderClient
-    private lateinit var mMap: GoogleMap
+    lateinit var fusedApi: FusedLocationProviderClient
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private var timer: Timer? = null
+    private lateinit var vmBusList: BusListViewModel
+
+    private val busesFetchTask = object: TimerTask() {
+        override fun run() {
+            log("Called")
+            vmBusList.getAllBuses()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,19 +74,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
-            ), drawerLayout
+            setOf(R.id.nav_home, R.id.nav_buses),
+            drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        isLocationEnabled()
-
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
+        vmBusList = ViewModelProvider(this).get(BusListViewModel::class.java)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -101,7 +93,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_sign_out -> {
-                signout()
+                signOut()
                 true
             }
             else -> {
@@ -110,24 +102,31 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun signout() {
-        // Because Admin login is manual and not based on Firebase Auth
-//        val isAdminLogged = sharedPref.getBoolean(KEY_USER_SAVED_LOCATION, false)
-//        if (isAdminLogged) {
-//            sharedPref.edit()
-//                .putBoolean(KEY_USER_SAVED_LOCATION, false)
-//                .apply()
-//            startLogin()
-//            return
-//        }
+    private fun signOut() {
         sharedPref.edit().clear().apply()
         startLogin()
+    }
 
-//        AuthUI.getInstance().signOut(this).addOnSuccessListener {
-//            startLogin()
-//        }.addOnFailureListener {
-//            toast("Couldn't sign out")
-//        }
+    override fun onResume() {
+        super.onResume()
+
+        timer = Timer("busGetListTimer")
+        timer!!.scheduleAtFixedRate(busesFetchTask, 100L, 5000L)
+    }
+
+    override fun onPause() {
+
+        timer?.cancel()
+        super.onPause()
+    }
+
+    fun onMapReady() {
+        fusedApi = LocationServices.getFusedLocationProviderClient(this)
+        if (!hasPermissions(this, *permissions)) {
+            requestPermissions()
+        } else {
+            onPermissionGranted()
+        }
     }
 
     private fun startLogin() {
@@ -143,19 +142,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    override fun onMapReady(googleMap: GoogleMap) {
-        mMap = googleMap
-
-        fusedApi = LocationServices.getFusedLocationProviderClient(this)
-        if (!hasPermissions(this, *permissions)) {
-            requestPermissions()
-        } else {
-            onPermissionGranted()
-        }
-    }
-
     @SuppressLint("MissingPermission")
-    private fun onPermissionGranted() {
+    fun onPermissionGranted() {
         if (hasPermissions(this, *permissions)) {
             // Get last location
             fusedApi.lastLocation.addOnCompleteListener { task ->
@@ -197,16 +185,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun onLocationReceived(location: Location) {
 
         val loc = LatLng(location.latitude, location.longitude)
-        val position = CameraPosition.builder()
-            .target(loc)
-            .zoom(20f)
-            .build()
-
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(position))
+        // TODO: Set location to HomeFragment
     }
 
     //region Permission Handling
-    private fun requestPermissions() {
+    fun requestPermissions() {
         // Permission is not granted
         // No explanation needed, we can request the permission.
         ActivityCompat.requestPermissions(

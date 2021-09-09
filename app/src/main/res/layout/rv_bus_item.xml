@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.circularreveal.cardview.CircularRevealCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:layout_marginTop="20dp"
+    app:cardCornerRadius="16dp"
+    android:id="@+id/card"
+    android:clickable="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="20dp">
+
+        <ImageView
+            android:id="@+id/iv_bus"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/ic_bus"
+            app:tint="@color/colorPrimary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/bus_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="AA-0028"
+            android:textSize="16sp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="@id/iv_bus"
+            app:layout_constraintEnd_toEndOf="@id/iv_bus"
+            app:layout_constraintTop_toBottomOf="@id/iv_bus"/>
+
+        <TextView
+            android:id="@+id/driver_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sariab Road"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/bus_no"
+            app:layout_constraintEnd_toEndOf="@id/bus_no"
+            app:layout_constraintTop_toBottomOf="@+id/bus_no" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.circularreveal.cardview.CircularRevealCardView>

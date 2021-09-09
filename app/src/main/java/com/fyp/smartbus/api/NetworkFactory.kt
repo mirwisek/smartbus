@@ -2,6 +2,7 @@ package com.fyp.smartbus.api
 
 import android.util.Log
 import com.fyp.smartbus.utils.log
+import com.google.gson.GsonBuilder
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -17,7 +18,7 @@ object NetworkFactory {
 
     private const val TIMEOUT = 70L
 
-    private const val URL_BASE = "http://192.168.10.2:3006/"
+    private const val URL_BASE = "http://192.168.10.5:3006/"
 
     private val logInterceptor = HttpLoggingInterceptor { message ->
         try {
@@ -29,16 +30,14 @@ object NetworkFactory {
         this.level = HttpLoggingInterceptor.Level.BODY
     }
 
-//        logInterceptor.level = HttpLoggingInterceptor.Level.BODY
-
     private val okhttp = OkHttpClient.Builder()
         .addInterceptor(logInterceptor)
         .readTimeout(TIMEOUT, TimeUnit.SECONDS)
         .build()
-//
-//        val gson = GsonBuilder()
-//                .registerTypeAdapter(LocalDateTime::class.java, JsonToDateTimeConverter())
-//                .create()
+
+//    private val gson = GsonBuilder()
+//            .registerTypeAdapter(Number::class.java, BooleanTypeAdapter())
+//            .create()
 
 
     private val retrofit: Retrofit = Retrofit.Builder()

@@ -26,11 +26,8 @@
     <string name="register_login_hint">Already have an account? Login</string>
 
 
-    <string name="menu_home">Under-Development</string>
-    <string name="menu_gallery">Under-Development</string>
-    <string name="menu_slideshow">Under-Development</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_buses">Buses</string>
     <string name="username">UserName</string>
     <string name="password">Password</string>
     <string name="email">Email</string>

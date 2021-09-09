@@ -9,6 +9,14 @@
         <entry key="..\:/Mir/Work/SmartBus/app/src/main/res/layout/app_bar_main.xml" value="0.4071557971014493" />
         <entry key="..\:/Mir/Work/SmartBus/app/src/main/res/layout/content_main.xml" value="0.22897669706180346" />
         <entry key="..\:/Mir/Work/SmartBus/app/src/main/res/layout/fragment_add_bus.xml" value="0.22897669706180346" />
+        <entry key="..\:/Mir/Work/SmartBus/app/src/main/res/layout/fragment_admin_login.xml" value="0.22897669706180346" />
+        <entry key="..\:/Mir/Work/SmartBus/app/src/main/res/layout/fragment_bus_list.xml" value="0.39266304347826086" />
+        <entry key="..\:/Mir/Work/SmartBus/app/src/main/res/layout/fragment_gallery.xml" value="0.22897669706180346" />
+        <entry key="..\:/Mir/Work/SmartBus/app/src/main/res/layout/fragment_home.xml" value="0.39266304347826086" />
+        <entry key="..\:/Mir/Work/SmartBus/app/src/main/res/layout/fragment_registration.xml" value="0.22897669706180346" />
+        <entry key="..\:/Mir/Work/SmartBus/app/src/main/res/layout/rv_bus_item.xml" value="0.39266304347826086" />
+        <entry key="..\:/Mir/Work/SmartBus/app/src/main/res/menu/activity_main_drawer.xml" value="0.4708333333333333" />
+        <entry key="..\:/Mir/Work/SmartBus/app/src/main/res/menu/main.xml" value="0.4708333333333333" />
         <entry key="..\:/Users/zain6/AndroidStudioProjects/smartbus/app/src/main/res/drawable/ic_directions_bus_black_24dp.xml" value="0.1925925925925926" />
         <entry key="..\:/Users/zain6/AndroidStudioProjects/smartbus/app/src/main/res/drawable/login_button_bk.xml" value="0.2203125" />
         <entry key="..\:/Users/zain6/AndroidStudioProjects/smartbus/app/src/main/res/drawable/logo.xml" value="0.2203125" />

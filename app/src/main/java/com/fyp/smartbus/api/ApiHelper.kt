@@ -84,7 +84,6 @@ object ApiHelper {
                 }
             }.build()
 
-//        log("inside network signup...${requestBody.toString()}")
         NetworkFactory.service.updateBus(requestBodyUpdate).enqueue(object : Callback<StringResponse> {
             override fun onResponse(call: Call<StringResponse>, response: Response<StringResponse>) {
                 val body = response.body()
@@ -104,7 +103,27 @@ object ApiHelper {
             }
 
         })
-//                    onResult(Result.success("Register Successfully."))
+    }
+
+    fun getAllBuses(onResult: (Result<List<Bus>>) -> Unit) {
+
+        NetworkFactory.service.getAllBuses().enqueue(object : Callback<BusListResponse> {
+            override fun onResponse(call: Call<BusListResponse>, response: Response<BusListResponse>) {
+                val body = response.body()
+                if (response.code() == 200) {
+                    // Empty list if null
+                    onResult(Result.success(body?.response ?: listOf()))
+                } else {
+                    onResult(Result.failure(Exception("Server Error...")))
+                }
+            }
+
+            override fun onFailure(call: Call<BusListResponse>, t: Throwable) {
+                log("On failure called network... ${t.message}")
+                onResult(Result.failure(t))
+            }
+
+        })
     }
 
 }
