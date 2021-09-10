@@ -3,7 +3,6 @@ package com.fyp.smartbus.utils
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.location.Location
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
@@ -12,7 +11,8 @@ import android.view.animation.Interpolator
 import android.view.animation.LinearInterpolator
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
-import com.fyp.smartbus.R
+import com.fyp.smartbus.MainActivity
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
@@ -22,13 +22,13 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 
-fun Context.getBusMarkerOptions(location: LatLng, @DrawableRes drawable: Int): MarkerOptions {
-    val options = MarkerOptions()
+fun Context.getBusMarkerOptions(location: LatLng, title: String, @DrawableRes drawable: Int): MarkerOptions {
+    return MarkerOptions()
         .icon(BitmapDescriptorFactory.fromResource(drawable))
         .position(LatLng(location.latitude, location.longitude))
-    options.anchor(0.5F, 0.5F)
-    options.flat(true)
-    return options
+        .anchor(0.5F, 0.5F)
+        .flat(true)
+        .title(title)
 }
 
 //
@@ -76,9 +76,11 @@ fun bearingBetweenLocations(prevLoc: LatLng, newLoc: LatLng): Double {
 
 // Marker Translation
 
-fun Marker.animateMarkerToGB(finalPosition: LatLng, shouldRotate: Boolean,
-                      latLngInterpolator: LatLngInterpolator, toRotation: Float, looper: Looper,
-                      markerUpdateCallback: ((marker: Marker) -> Unit)? = null) {
+fun Marker.animateMarkerToGB(
+    finalPosition: LatLng, shouldRotate: Boolean,
+    latLngInterpolator: LatLngInterpolator, toRotation: Float, looper: Looper,
+    markerUpdateCallback: ((marker: Marker) -> Unit)? = null
+) {
     val marker = this
     val startPosition = marker.position
     val handler = Handler(looper)
@@ -95,7 +97,7 @@ fun Marker.animateMarkerToGB(finalPosition: LatLng, shouldRotate: Boolean,
         override fun run() {
             // Calculate progress using interpolator
             elapsed = SystemClock.uptimeMillis() - timeStart
-            if(shouldRotate) {
+            if (shouldRotate) {
                 val rotT: Float = rotInterpolator.getInterpolation(elapsed.toFloat() / rotDuration)
                 val rot = rotT * toRotation + (1 - rotT)
                 marker.rotation = if (-rot > 180) rot / 2 else rot

@@ -7,8 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import com.fyp.smartbus.MainActivity
 import com.fyp.smartbus.databinding.FragmentBusListBinding
 import com.fyp.smartbus.login.viewmodel.BusListViewModel
+import com.fyp.smartbus.ui.home.HomeFragment
+import com.fyp.smartbus.ui.home.HomeFragmentArgs
 import com.fyp.smartbus.utils.invisible
 import com.fyp.smartbus.utils.log
 import com.fyp.smartbus.utils.toast
@@ -35,7 +38,7 @@ class BusListFragment : Fragment() {
             ViewModelProvider(requireActivity()).get(BusListViewModel::class.java)
 
         val adapter = GridAdapter(requireContext()) {
-            toast("Bus is ${it.busno}")
+            (requireActivity() as MainActivity).showBusOnMap(it)
         }
 
         binding.rvBusList.apply {
@@ -43,8 +46,12 @@ class BusListFragment : Fragment() {
             layoutManager = GridLayoutManager(requireContext(), 2)
         }
 
-        adapter.setOnDirectionsClickListener {
-
+        adapter.setOnDirectionsClickListener { bus ->
+            if(bus.currentloc == null && bus.lastloc == null) {
+                toast("Directions not available for this bus")
+            } else {
+                (requireActivity() as MainActivity).directionsOnHome(bus)
+            }
         }
 
         vmBusList.busList.observe(viewLifecycleOwner) { busList ->
@@ -54,7 +61,6 @@ class BusListFragment : Fragment() {
                 binding.error.invisible()
                 adapter.updateList(busList)
             }
-            log("Data is ${busList.size}")
         }
 
         vmBusList.error.observe(viewLifecycleOwner) { e ->

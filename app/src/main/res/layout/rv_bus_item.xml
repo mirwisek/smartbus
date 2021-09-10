@@ -2,8 +2,8 @@
 <com.google.android.material.circularreveal.cardview.CircularRevealCardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
-    android:layout_marginTop="20dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginTop="10dp"
     app:cardCornerRadius="16dp"
     android:id="@+id/card"
     android:clickable="true"
@@ -12,7 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="20dp">
+        android:layout_margin="10dp">
 
         <ImageView
             android:id="@+id/iv_bus"
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:text="Sariab Road"
             android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="5dp"
             app:layout_constraintStart_toStartOf="@+id/bus_no"
             app:layout_constraintEnd_toEndOf="@id/bus_no"
             app:layout_constraintTop_toBottomOf="@+id/bus_no" />
@@ -51,7 +51,8 @@
             android:id="@+id/btn_directions"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Get Directions"
+            android:text="Directions"
+            android:textSize="10sp"
             app:backgroundTint="@color/light_blue_600"
             app:icon="@drawable/ic_directions"
             android:layout_marginTop="10dp"

@@ -52,4 +52,6 @@
     <string name="stop_driving">Stop Driving</string>
     <string name="stopping">"Stopping..."</string>
 
+    <style name="arg_bus_no">bus_no_arg</style>
+
 </resources>

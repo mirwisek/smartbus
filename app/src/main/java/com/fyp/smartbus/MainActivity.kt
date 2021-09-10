@@ -16,19 +16,28 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.fyp.smartbus.login.AdminLoginFragment
+import com.fyp.smartbus.api.app.Bus
 import com.fyp.smartbus.login.RegistrationActivity
 import com.fyp.smartbus.login.viewmodel.BusListViewModel
-import com.fyp.smartbus.utils.log
+import com.fyp.smartbus.ui.buses.BusListFragmentDirections
+import com.fyp.smartbus.ui.home.HomeFragment
+import com.fyp.smartbus.ui.home.HomeFragmentArgs
 import com.fyp.smartbus.utils.sharedPref
+import com.fyp.smartbus.utils.toLatLng
 import com.fyp.smartbus.utils.toast
 import com.google.android.gms.location.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.navigation.NavigationView
 import java.util.*
 
@@ -50,10 +59,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    var markerCurrentLoc: Marker? = null
+    private var mMap: GoogleMap? = null
     lateinit var fusedApi: FusedLocationProviderClient
     private lateinit var appBarConfiguration: AppBarConfiguration
     private var timer: Timer? = null
     private lateinit var vmBusList: BusListViewModel
+    private lateinit var navController: NavController
+    var currentLocation: LatLng? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +77,7 @@ class MainActivity : AppCompatActivity() {
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
-        val navController = findNavController(R.id.nav_host_fragment)
+        navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
@@ -74,12 +87,42 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-
         vmBusList = ViewModelProvider(this).get(BusListViewModel::class.java)
+
+
+        fusedApi = LocationServices.getFusedLocationProviderClient(this)
+        if(hasPermissions(*permissions)) {
+            onPermissionGranted()
+        } else {
+            requestPermissions()
+        }
     }
 
-    fun directionsOnHome() {
-        // TODO: Zain
+    fun addCurrentLocationMarker() {
+        currentLocation?.let {
+            markerCurrentLoc?.remove()
+            markerCurrentLoc = mMap?.addMarker(
+                MarkerOptions()
+                    .position(it)
+                    .flat(true)
+                    .title("Your location")
+            )
+        }
+    }
+
+    fun directionsOnHome(bus: Bus) {
+        currentLocation?.let {
+            vmBusList.selectedBus.value = bus
+            vmBusList.getDirections(it)
+            val action = BusListFragmentDirections.actionShowMapDirections(bus.busno!!)
+            navController.navigate(action)
+        }
+    }
+
+    fun showBusOnMap(bus: Bus) {
+        val loc = bus.currentloc ?: bus.lastloc
+        val action = BusListFragmentDirections.actionShowBus(busLocation = loc)
+        navController.navigate(action)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -127,21 +170,11 @@ class MainActivity : AppCompatActivity() {
         super.onPause()
     }
 
-    fun onMapReady() {
-        fusedApi = LocationServices.getFusedLocationProviderClient(this)
-        if (!hasPermissions(this, *permissions)) {
-            requestPermissions()
-        } else {
-            onPermissionGranted()
-        }
+    fun onMapReady(mMap: GoogleMap) {
+        this.mMap = mMap
     }
 
     private fun startLogin() {
-//        val fragLogin =
-//            supportFragmentManager.findFragmentByTag(AdminLoginFragment.TAG) ?: AdminLoginFragment()
-//        supportFragmentManager.beginTransaction()
-//            .replace(R.id.container, fragLogin, AdminLoginFragment.TAG)
-//            .commit()
         startActivity(Intent(this, RegistrationActivity::class.java))
         finish()
     }
@@ -153,32 +186,21 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("MissingPermission")
     fun onPermissionGranted() {
-        if (hasPermissions(this, *permissions)) {
+        if (hasPermissions(*permissions)) {
             // Get last location
-            fusedApi.lastLocation.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val location = task.result
-                    // If last location isn't returned, make a new request
-                    if (location == null) {
-                        // Before retrieving location check if gps is enabled
-                        if (isLocationEnabled())
-                            forceLocation()
-                        else
-                            enableGPS(locationRequest)
-                    } else {
-                        onLocationReceived(location)
-                    }
-                } else {
-                    toast("Your location couldn't be determined")
+            // Before retrieving location check if gps is enabled
+            if (isLocationEnabled())
+                forceLocation()
+            else
+                enableGPS(locationRequest) {
+                    forceLocation()
                 }
-            }
         } else
             toast("No location permission granted")
     }
 
     @SuppressLint("MissingPermission")
     private fun forceLocation() {
-        isLocationEnabled()
         val callback = object : LocationCallback() {
             override fun onLocationResult(result: LocationResult) {
                 onLocationReceived(result.locations[0])
@@ -192,9 +214,15 @@ class MainActivity : AppCompatActivity() {
      * Method to perform operation on Location
      */
     private fun onLocationReceived(location: Location) {
+        currentLocation = LatLng(location.latitude, location.longitude)
 
-        val loc = LatLng(location.latitude, location.longitude)
-        // TODO: Set location to HomeFragment
+        val position = CameraPosition.builder()
+            .target(currentLocation!!)
+            .zoom(20f)
+            .build()
+
+        mMap?.animateCamera(CameraUpdateFactory.newCameraPosition(position))
+        addCurrentLocationMarker()
     }
 
     //region Permission Handling
@@ -208,9 +236,9 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    private fun hasPermissions(context: Context, vararg permissions: String): Boolean =
+    private fun hasPermissions(vararg permissions: String): Boolean =
         permissions.all {
-            ActivityCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
+            ActivityCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
         }
 
     override fun onRequestPermissionsResult(

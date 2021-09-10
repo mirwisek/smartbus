@@ -148,6 +148,8 @@
         android:dividerPadding="0dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
+        app:selectionRequired="true"
+        app:checkedButton="@id/btnStudent"
         app:layout_constraintEnd_toEndOf="@id/tlbus"
         app:layout_constraintStart_toStartOf="@id/tlbus"
         app:layout_constraintTop_toBottomOf="@id/tlbus"
