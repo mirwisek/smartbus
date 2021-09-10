@@ -21,6 +21,8 @@ import com.fyp.privacyguard.login.viewmodel.LoginViewModel
 import com.fyp.smartbus.DriverActivity
 import com.fyp.smartbus.MainActivity
 import com.fyp.smartbus.R
+import com.fyp.smartbus.api.app.ApiHelper
+import com.fyp.smartbus.api.app.User
 import com.fyp.smartbus.utils.*
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.FirebaseFirestore
@@ -92,6 +94,32 @@ class AdminLoginFragment : Fragment() {
             }
         }
 
+        view.findViewById<TextView>(R.id.btnforgot).setOnClickListener {
+            val email = etEmail.text.toString()
+
+            if (email == null || email == "") {
+                toast("Please Fill Email Field")
+            } else {
+                toggleFormInput(false)
+                showProgress()
+                ApiHelper.forgotPass(email) { result ->
+                    result.fold(
+                        onSuccess = { u ->
+                            toast("Email Succesfully Sent")
+                            hideProgress()
+                            toggleFormInput(true)
+                        },
+                        onFailure = { e ->
+                            toast("ERROR: ${e.localizedMessage}")
+                            e.printStackTrace()
+                            hideProgress()
+                            toggleFormInput(true)
+                        }
+                    )
+
+                }
+            }
+        }
 
         vmLogin.loginFormState.observe(viewLifecycleOwner,
             Observer { loginFormState ->
@@ -131,6 +159,7 @@ class AdminLoginFragment : Fragment() {
                 vmLogin.login(email, pass) { result ->
                     result.fold(
                         onSuccess = { u ->
+                            log("Savving ... $u")
                             requireContext().sharedPref.edit(true) {
                                 putString(KEY_USERNAME, u.username)
                                 putString(KEY_EMAIL, u.email)
@@ -138,8 +167,7 @@ class AdminLoginFragment : Fragment() {
                             }
                             hideProgress()
                             toggleFormInput(true)
-                            // Restart the activity it has the logic to direct as per user type
-                            switchActivity(RegistrationActivity::class.java)
+                            switchActivity(DriverActivity::class.java)
                         },
                         onFailure = { e ->
                             toast("ERROR: ${e.localizedMessage}")
