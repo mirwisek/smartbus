@@ -23,3 +23,8 @@ data class Bus(
         var currentloc : String? = null
 )
 
+data class Bearings(
+        var oldBearing: Float,
+        var newBearing: Float
+)
+

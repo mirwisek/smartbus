@@ -22,6 +22,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.fyp.smartbus.login.AdminLoginFragment
+import com.fyp.smartbus.login.RegistrationActivity
 import com.fyp.smartbus.login.viewmodel.BusListViewModel
 import com.fyp.smartbus.utils.log
 import com.fyp.smartbus.utils.sharedPref
@@ -53,13 +54,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private var timer: Timer? = null
     private lateinit var vmBusList: BusListViewModel
-
-    private val busesFetchTask = object: TimerTask() {
-        override fun run() {
-            log("Called")
-            vmBusList.getAllBuses()
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,6 +96,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun newBusesFetchTask(): TimerTask {
+        return object: TimerTask() {
+            override fun run() {
+                vmBusList.getAllBuses()
+            }
+        }
+    }
+
     private fun signOut() {
         sharedPref.edit().clear().apply()
         startLogin()
@@ -110,12 +112,12 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        timer = Timer("busGetListTimer")
-        timer!!.scheduleAtFixedRate(busesFetchTask, 100L, 5000L)
+        timer = Timer().apply {
+            scheduleAtFixedRate(newBusesFetchTask(), 100L, 5000L)
+        }
     }
 
     override fun onPause() {
-
         timer?.cancel()
         super.onPause()
     }
@@ -130,11 +132,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startLogin() {
-        val fragLogin =
-            supportFragmentManager.findFragmentByTag(AdminLoginFragment.TAG) ?: AdminLoginFragment()
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.container, fragLogin, AdminLoginFragment.TAG)
-            .commit()
+//        val fragLogin =
+//            supportFragmentManager.findFragmentByTag(AdminLoginFragment.TAG) ?: AdminLoginFragment()
+//        supportFragmentManager.beginTransaction()
+//            .replace(R.id.container, fragLogin, AdminLoginFragment.TAG)
+//            .commit()
+        startActivity(Intent(this, RegistrationActivity::class.java))
+        finish()
     }
 
     override fun onSupportNavigateUp(): Boolean {

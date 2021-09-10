@@ -52,6 +52,7 @@ const val REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE = 34
     * =========== KOTLIN - EXTENSIONS
 */
 
+
 @RequiresApi(Build.VERSION_CODES.O)
 fun Context.createNotificationChanel() {
     val channelName = "SmartBus Channel"
@@ -102,36 +103,6 @@ fun View.visible() {
 
 fun View.invisible() {
     visibility = View.INVISIBLE
-}
-//
-//fun Context.drawRoute(map: GoogleMap): ArrayList<Polyline> {
-//
-//    val fileRoute = resources.readFile(R.raw.bus_route)
-//    val json = JSONObject(fileRoute)
-//    val quetta = json.getString("quetta")
-//    val kuchlak = json.getString("kuchlak")
-//
-//    val opt1 = PolylineOptions()
-//        .color(getMyColor(R.color.kuchlak))
-//        .geodesic(true)
-//        .width(20f)
-//        .addAll(PolyUtil.decode(quetta))
-//
-//    val opt2 = PolylineOptions()
-//        .color(getMyColor(R.color.quetta))
-//        .geodesic(true)
-//        .width(20f)
-//        .addAll(PolyUtil.decode(kuchlak))
-//
-//    val polyQ = map.addPolyline(opt1)
-//    val polyK = map.addPolyline(opt2)
-//
-//    return arrayListOf(polyQ, polyK)
-//}
-
-
-fun Context.isAboveMarshmallow(): Boolean {
-    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
 }
 
 fun log(msg: String) {

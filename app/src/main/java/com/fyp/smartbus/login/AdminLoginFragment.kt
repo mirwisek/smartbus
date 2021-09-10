@@ -131,7 +131,6 @@ class AdminLoginFragment : Fragment() {
                 vmLogin.login(email, pass) { result ->
                     result.fold(
                         onSuccess = { u ->
-                            log("Savving ... $u")
                             requireContext().sharedPref.edit(true) {
                                 putString(KEY_USERNAME, u.username)
                                 putString(KEY_EMAIL, u.email)
@@ -139,7 +138,8 @@ class AdminLoginFragment : Fragment() {
                             }
                             hideProgress()
                             toggleFormInput(true)
-                            switchActivity(DriverActivity::class.java)
+                            // Restart the activity it has the logic to direct as per user type
+                            switchActivity(RegistrationActivity::class.java)
                         },
                         onFailure = { e ->
                             toast("ERROR: ${e.localizedMessage}")
