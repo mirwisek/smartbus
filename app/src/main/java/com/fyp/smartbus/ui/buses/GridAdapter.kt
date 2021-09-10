@@ -14,6 +14,7 @@ class GridAdapter(private val context: Context, private val onClick: (bus: Bus) 
     RecyclerView.Adapter<GridAdapter.GridViewHolder>() {
 
     private var list: List<Bus>? = null
+    private var onDirections: ((bus: Bus) -> Unit)? = null
 
     inner class GridViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val binding = RvBusItemBinding.bind(view)
@@ -39,9 +40,16 @@ class GridAdapter(private val context: Context, private val onClick: (bus: Bus) 
                     }
                     val tint = if(isonline == true) R.color.busOnline else R.color.busOffline
                     binding.ivBus.setColorFilter(ContextCompat.getColor(context, tint))
+                    binding.btnDirections.setOnClickListener {
+                        onDirections?.invoke(this)
+                    }
                 }
             }
         }
+    }
+
+    fun setOnDirectionsClickListener(onClick: (bus: Bus) -> Unit) {
+        onDirections = onClick
     }
 
     fun updateList(list: List<Bus>) {

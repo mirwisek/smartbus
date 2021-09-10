@@ -43,7 +43,9 @@ class BusListFragment : Fragment() {
             layoutManager = GridLayoutManager(requireContext(), 2)
         }
 
+        adapter.setOnDirectionsClickListener {
 
+        }
 
         vmBusList.busList.observe(viewLifecycleOwner) { busList ->
             if(busList.isEmpty()) {

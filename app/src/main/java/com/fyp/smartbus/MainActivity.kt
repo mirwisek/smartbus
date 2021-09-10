@@ -74,7 +74,12 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+
         vmBusList = ViewModelProvider(this).get(BusListViewModel::class.java)
+    }
+
+    fun directionsOnHome() {
+        // TODO: Zain
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
