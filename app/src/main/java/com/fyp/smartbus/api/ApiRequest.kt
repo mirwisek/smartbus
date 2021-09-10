@@ -11,12 +11,12 @@ interface ApiRequest {
     fun createUser(@Body user: RequestBody): Call<UserResponse>
 
     @PATCH("/updatebus")
-    fun updateBus(@Body user: RequestBody): Call<BusResponse>
+    fun updateBus(@Body user: MultipartBody): Call<StringResponse>
 
     @POST("/login")
     fun loginUser(@Body user: RequestBody) : Call<UserResponse>
 
-    @GET("/getbusdetail")
-    fun getOnlineBus(@Body bus : RequestBody) : Call<BusOnlineResponse>
+    @GET("/getBuses")
+    fun getAllBuses() : Call<BusListResponse>
 
 }

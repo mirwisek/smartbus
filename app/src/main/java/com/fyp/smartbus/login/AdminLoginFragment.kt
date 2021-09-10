@@ -129,7 +129,6 @@ class AdminLoginFragment : Fragment() {
                 val email = etEmail.text.toString()
                 val pass = etPass.text.toString()
                 vmLogin.login(email, pass) { result ->
-//                    log("inside login...$result")
                     result.fold(
                         onSuccess = { u ->
                             log("Savving ... $u")

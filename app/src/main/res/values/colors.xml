@@ -20,4 +20,6 @@
     <color name="light_blue_A400">#FF00B0FF</color>
     <color name="black_overlay">#66000000</color>
     <color name="textPrime">#303030</color>
+    <color name="busOnline">#009688</color>
+    <color name="busOffline">#B32C23</color>
 </resources>

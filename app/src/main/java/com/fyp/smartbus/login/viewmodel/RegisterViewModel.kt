@@ -30,25 +30,6 @@ class RegisterViewModel(private val app: Application) : AndroidViewModel(app) {
         ApiHelper.signup(User(email, password, username, busno ,usertype), onResult)
     }
 
-//    fun register(user: LoggedInUser) {
-//        // can be launched in a separate asynchronous job
-//        repository.register(user) { result ->
-//            if (result is Result.Success) {
-//                val returnedUser = result.data
-//                SharedPrefsHelper.saveUser(app.applicationContext, returnedUser)
-//
-//                _registerResult.value =
-//                    UserResult(
-//                        success = LoggedInUserView(
-//                            displayName = returnedUser.name!!
-//                        )
-//                    )
-//            } else if(result is Result.Error) {
-//                _registerResult.value = UserResult(error = result.exception)
-//            }
-//        }
-//    }
-
     fun registerDataChanged(email: String, password: String, username: String) {
         if (!isEmailValid(email)) {
             _registerForm.value =

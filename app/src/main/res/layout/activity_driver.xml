@@ -7,16 +7,60 @@
     android:id="@+id/container"
     tools:context=".DriverActivity">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="20dp"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:text="You must have allowed location permission and enabled GPS"/>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="center"
+        app:lottie_scale="0.6"
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true"
+        app:lottie_repeatMode="restart"
+        app:lottie_rawRes="@raw/location"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animBus"
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="center"
+        app:lottie_scale="0.2"
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true"
+        app:lottie_repeatMode="restart"
+        app:lottie_rawRes="@raw/bus"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fabDriving"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:text="start driving"
+        android:text="@string/start_driving"
         app:icon="@drawable/ic_bus"
         app:iconTint="@color/white"
         android:textColor="@color/white"
-        app:backgroundTint="@color/purple_500"
+        app:backgroundTint="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

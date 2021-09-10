@@ -1,5 +1,6 @@
 package com.fyp.smartbus
 
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -14,13 +15,13 @@ import android.os.IBinder
 import android.os.Looper
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.core.content.edit
 import com.fyp.smartbus.api.ApiHelper
 import com.fyp.smartbus.api.Bus
 import com.fyp.smartbus.api.User
 import com.fyp.smartbus.utils.*
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
-import com.google.firebase.auth.FirebaseAuth
 
 
 class DriverLocationService : Service() {
@@ -38,9 +39,6 @@ class DriverLocationService : Service() {
     // LocationCallback - Called when FusedLocationProviderClient has a new Location.
     private lateinit var locationCallback: LocationCallback
 
-
-
-    // TODO: Step 1.1, Review variables (no changes).
     // FusedLocationProviderClient - Main class for receiving location updates.
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
@@ -51,7 +49,6 @@ class DriverLocationService : Service() {
     private var currentLocation: Location? = null
     private var prevLocation: Location? = null
     private var driver: User? = null
-
 
 
     private lateinit var notificationManager: NotificationManager
@@ -72,12 +69,8 @@ class DriverLocationService : Service() {
         if(serviceRunningInForeground)
             notificationManager.notify(NOTIFICATION_ID, generateNotification())
 
-        // TODO: Step 1.2, Review the FusedLocationProviderClient.
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-
-        // TODO: Step 1.3, Create a LocationRequest.
         locationRequest = MapsUtils.getLocationRequest()
-
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 super.onLocationResult(locationResult)
@@ -94,16 +87,16 @@ class DriverLocationService : Service() {
                     sendBroadcast(intent)
                 }
 
-                // TODO: [Zain - When other errors fixed then uncomment the following function]
+                log("Location in Service: ${loc.string()}")
                 updateLocationDatabase(loc.toLatLng())
             }
         }
 
     }
 
-    private fun updateLocationDatabase(loc: LatLng, isOnline: Boolean = true, cb: (() -> Unit)? = null) {
+    private fun updateLocationDatabase(loc: LatLng?, isOnline: Boolean = true, cb: (() -> Unit)? = null) {
         driver?.let { u ->
-            val bus = Bus(u.email, currentloc = loc.string(), isonline = isOnline)
+            val bus = Bus(u.email, currentloc = loc?.string(), isonline = isOnline)
             ApiHelper.updateBus(bus) { result ->
                 result.fold(
                     onSuccess = {
@@ -121,14 +114,22 @@ class DriverLocationService : Service() {
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         Log.d(TAG, "onStartCommand()")
-        val cancelLocationTrackingFromNotification =
-            intent.getBooleanExtra(EXTRA_CANCEL_LOCATION_TRACKING_FROM_NOTIFICATION, false)
-
-        if (cancelLocationTrackingFromNotification) {
+        val shouldStopLocationService =
+            intent.getBooleanExtra(EXTRA_STOP_LOCATION_TRACKING, false)
+        log("on start with stop: $shouldStopLocationService")
+        // STOP THE SERVICE
+        if (shouldStopLocationService) {
+            log("Stopping called")
             unsubscribeToLocationUpdates()
 
-            //  TODO: [Zain - Uncomment this finally, turn off isonline && clear locations, should set location to null when isonline turned off]
-            updateLocationDatabase(LatLng(0.0, 0.0), isOnline = false) {
+            updateLocationDatabase(null, isOnline = false) {
+                sharedPref.edit(true) {
+                    putBoolean(KEY_IS_DRIVING, false)
+                }
+                Intent(ACTION_LOCTION_TOGGLED).also { intent ->
+                    intent.putExtra(EXTRA_IS_DRIVING, false)
+                    sendBroadcast(intent)
+                }
                 toast("Going Offline...")
                 stopSelf()
             }
@@ -188,9 +189,6 @@ class DriverLocationService : Service() {
 
     fun subscribeToLocationUpdates() {
         Log.d(TAG, "subscribeToLocationUpdates()")
-        // TODO: Chaqnge driverUID to driver email
-//        saveLocationTrackingPref( true,
-//            currentLocation.toText(), driverUid!!)
 
         // Binding to this service doesn't actually trigger onStartCommand(). That is needed to
         // ensure this Service can be promoted to a foreground service, i.e., the service needs to
@@ -198,8 +196,15 @@ class DriverLocationService : Service() {
         val service = Intent(applicationContext, DriverLocationService::class.java)
         startService(service)
 
+        // Set the status to true for UI update button
+        (application as SmartBusApp).isDrivingServiceRunning = true
+        // Update the UI through broadcast
+        Intent(ACTION_LOCTION_TOGGLED).also { intent ->
+            intent.putExtra(EXTRA_IS_DRIVING, true)
+            sendBroadcast(intent)
+        }
         try {
-            // TODO: Step 1.5, Subscribe to location changes.
+            // Subscribe to location changes.
             fusedLocationProviderClient.requestLocationUpdates(
                 locationRequest, locationCallback, Looper.myLooper()!!)
 
@@ -209,26 +214,23 @@ class DriverLocationService : Service() {
     }
 
 
-    fun unsubscribeToLocationUpdates() {
+    private fun unsubscribeToLocationUpdates() {
         Log.d(TAG, "unsubscribeToLocationUpdates()")
 
         try {
-            // TODO: Step 1.6, Unsubscribe to location changes.
+            // Unsubscribe to location changes.
             val removeTask = fusedLocationProviderClient.removeLocationUpdates(locationCallback)
             removeTask.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "Location Callback removed.")
+                    (application as SmartBusApp).isDrivingServiceRunning = false
                     stopSelf()
                 } else {
                     Log.d(TAG, "Failed to remove Location Callback.")
                 }
             }
-//            saveLocationTrackingPref( false,
-//                currentLocation.toText(), driverUid!!)
 
         } catch (unlikely: SecurityException) {
-//            saveLocationTrackingPref( true,
-//                currentLocation.toText(), driverUid!!)
             Log.e(TAG, "Lost location permissions. Couldn't remove updates. $unlikely")
         }
     }
@@ -236,6 +238,7 @@ class DriverLocationService : Service() {
     /*
      * Generates a BIG_TEXT_STYLE Notification that represent latest location.
      */
+    @SuppressLint("UnspecifiedImmutableFlag")
     private fun generateNotification(): Notification {
         Log.d(TAG, "generateNotification()")
 
@@ -247,12 +250,11 @@ class DriverLocationService : Service() {
             .bigText(mainNotificationText)
             .setBigContentTitle(titleText)
 
-        // TODO: Change to driver acitivty
         // 3. Set up main Intent/Pending Intents for notification.
         val launchActivityIntent = Intent(this, DrivingActivity::class.java)
 
         val cancelIntent = Intent(this, DriverLocationService::class.java)
-        cancelIntent.putExtra(EXTRA_CANCEL_LOCATION_TRACKING_FROM_NOTIFICATION, true)
+        cancelIntent.putExtra(EXTRA_STOP_LOCATION_TRACKING, true)
 
         val servicePendingIntent = PendingIntent.getService(
             this, 0, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT)

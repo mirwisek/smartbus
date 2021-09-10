@@ -14,3 +14,7 @@
 .cxx
 local.properties
 /.idea/
+/SmartBusApi/node_modules/
+/SmartBusApi/package-lock.json
+/SmartBusApi/.env
+

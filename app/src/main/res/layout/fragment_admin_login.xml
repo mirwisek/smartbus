@@ -25,7 +25,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="40dp"
-        android:textColor="#2DB788"
+        android:textColor="@color/orange_light"
         android:text="Smart Bus"
         android:textSize="30sp"
         android:textStyle="bold"
@@ -38,73 +38,45 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="10dp"
+        android:layout_marginTop="10dp"
         android:text="Tracking your bus easier with Smart Bus"
-        android:textSize="25sp"
-        android:textStyle="bold|italic"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/brandName" />
 
-
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:elevation="-1dp"
-        android:src="@drawable/logo"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
     <TextView
-        android:id="@+id/tvsingin"
+        android:id="@+id/tvLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:fontFamily="sans-serif-medium"
-        android:letterSpacing="-0.01"
         android:lineSpacingExtra="20sp"
-        android:text="Sign In"
+        android:text="Login"
         android:textColor="#23203f"
         android:textSize="25sp"
-        android:textStyle="normal"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/description" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:letterSpacing="0.0265"
-        android:text="Login to continue your account"
-        android:textColor="#6e6e73"
-        android:textSize="17sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvsingin" />
 
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tlemail"
-        android:layout_marginTop="10dp"
-        app:boxBackgroundMode="outline"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2">
+        app:layout_constraintTop_toBottomOf="@+id/tvLogin">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etemail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
             android:focusable="true"
             android:fontFamily="sans-serif"
             android:hint="@string/loginemail"
@@ -121,7 +93,9 @@
         android:id="@+id/tlpass"
         app:endIconMode="password_toggle"
         android:layout_marginTop="10dp"
-        app:boxBackgroundMode="outline"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tlemail">
@@ -130,8 +104,6 @@
             android:id="@+id/etpass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
             android:focusable="true"
             android:fontFamily="sans-serif"
             android:inputType="textPassword"
@@ -143,21 +115,36 @@
     </com.google.android.material.textfield.TextInputLayout>
 
 
+
+    <ProgressBar
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:layout_marginTop="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnlogin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tlpass"
+        tools:visibility="visible" />
+
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnlogin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="70dp"
-        style="@style/loginButton"
-        android:padding="15dp"
+        android:layout_marginTop="30dp"
+        app:backgroundTint="@color/colorPrimaryDark"
+        app:cornerRadius="30dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
         android:text="@string/login"
-        app:iconGravity="textStart"
-        app:iconPadding="20dp"
-        app:layout_constraintBottom_toBottomOf="@id/btnregistration"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@id/loading"
+        app:layout_constraintTop_toBottomOf="@id/loading"
+        app:layout_constraintEnd_toEndOf="@id/tlemail"
         app:layout_constraintHorizontal_bias="1.0"
          />
 
@@ -167,29 +154,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginStart="10dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="70dp"
         android:padding="15dp"
         android:clickable="true"
         android:text="@string/registration"
         app:iconGravity="textStart"
         app:iconPadding="20dp"
-        android:textColor="@color/colorPrimary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintTop_toBottomOf="@+id/btnlogin" />
-
-    <ProgressBar
-        android:id="@+id/loading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/btnlogin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tlpass"
-        tools:visibility="visible" />
+        android:textColor="@color/colorAccent"
+        app:layout_constraintTop_toBottomOf="@id/btnlogin"
+        app:layout_constraintEnd_toEndOf="@id/btnlogin"
+        app:layout_constraintHorizontal_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

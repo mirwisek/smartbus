@@ -44,6 +44,8 @@ object ApiHelper {
     }
 
 
+
+
     fun login(user: User, onResult: (Result<User>) -> Unit) {
         val requestBody = MultipartBody.Builder()
             .setType(MultipartBody.FORM).apply {
@@ -72,19 +74,18 @@ object ApiHelper {
         })
     }
 
-    fun updateBus(bus: Bus, onResult: (Result<Bus>) -> Unit) {
+    fun updateBus(bus: Bus, onResult: (Result<String>) -> Unit) {
         val requestBodyUpdate = MultipartBody.Builder()
             .setType(MultipartBody.FORM).apply {
                 addFormDataPart("email", bus.email)
-//                log("isonline: ${bus.isonline}")
-                // TODO: [Zain - Fix boolean value send to retrofit]
-                addFormDataPart("isonline", (if (bus.isonline!!) 1 else 0).toString())
-                addFormDataPart("currentloc", bus.currentloc!!)
+                addFormDataPart("isonline", (if(bus.isonline!!) 1 else 0).toString() )
+                bus.currentloc?.let { loc ->
+                    addFormDataPart("currentloc", loc)
+                }
             }.build()
 
-//        log("inside network signup...${requestBody.toString()}")
-        NetworkFactory.service.updateBus(requestBodyUpdate).enqueue(object : Callback<BusResponse> {
-            override fun onResponse(call: Call<BusResponse>, response: Response<BusResponse>) {
+        NetworkFactory.service.updateBus(requestBodyUpdate).enqueue(object : Callback<StringResponse> {
+            override fun onResponse(call: Call<StringResponse>, response: Response<StringResponse>) {
                 val body = response.body()
                 log("inside network login...${response.body()}")
                 if (response.code() == 200) {
@@ -96,43 +97,33 @@ object ApiHelper {
                 }
             }
 
-            override fun onFailure(call: Call<BusResponse>, t: Throwable) {
+            override fun onFailure(call: Call<StringResponse>, t: Throwable) {
                 log("On failure called network... ${t.message}")
                 onResult(Result.failure(t))
             }
 
         })
-//                    onResult(Result.success("Register Successfully."))
     }
 
+    fun getAllBuses(onResult: (Result<List<Bus>>) -> Unit) {
 
-    fun getBusOnline(onResult: (Result<BusOnline>) -> Unit) {
-        val requestBody = MultipartBody.Builder()
-            .build()
-        log("Server network...${NetworkFactory.service.toString()}")
-        NetworkFactory.service.getOnlineBus(requestBody)
-            .enqueue(object : Callback<BusOnlineResponse> {
-                override fun onResponse(
-                    call: Call<BusOnlineResponse>,
-                    response: Response<BusOnlineResponse>
-                ) {
-                    val body = response.body()
-                    log("inside network login...${response.body()}")
-                    if (response.code() == 200 && body != null) {
-                        onResult(Result.success(body.response!!))
-                    } else if (response.code() == 403) {
-                        onResult(Result.failure(Exception("Email/Password is incorrect!!")))
-                    } else {
-                        onResult(Result.failure(Exception("Server Error...")))
-                    }
+        NetworkFactory.service.getAllBuses().enqueue(object : Callback<BusListResponse> {
+            override fun onResponse(call: Call<BusListResponse>, response: Response<BusListResponse>) {
+                val body = response.body()
+                if (response.code() == 200) {
+                    // Empty list if null
+                    onResult(Result.success(body?.response ?: listOf()))
+                } else {
+                    onResult(Result.failure(Exception("Server Error...")))
                 }
+            }
 
-                override fun onFailure(call: Call<BusOnlineResponse>, t: Throwable) {
-                    log("On failure called network... ${t.message}")
-                    onResult(Result.failure(t))
-                }
+            override fun onFailure(call: Call<BusListResponse>, t: Throwable) {
+                log("On failure called network... ${t.message}")
+                onResult(Result.failure(t))
+            }
 
-            })
+        })
     }
 
 }

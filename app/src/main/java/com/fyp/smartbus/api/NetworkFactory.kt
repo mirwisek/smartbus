@@ -2,6 +2,7 @@ package com.fyp.smartbus.api
 
 import android.util.Log
 import com.fyp.smartbus.utils.log
+import com.google.gson.GsonBuilder
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -11,37 +12,32 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
+import java.util.concurrent.TimeUnit
 
 object NetworkFactory {
-//    lateinit var service: ApiRequest
 
     private const val TIMEOUT = 70L
 
-    private const val URL_BASE = "http://192.168.100.3:3006/"
+    private const val URL_BASE = "http://192.168.10.5:3006/"
 
-    private val logInterceptor = HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger {
-        override fun log(message: String) {
-            try {
-                Log.i("ffnet", message)
-            } catch (e: Exception) {
-                println("ffnet: $message")
-            }
+    private val logInterceptor = HttpLoggingInterceptor { message ->
+        try {
+            Log.i("ffnet", message)
+        } catch (e: Exception) {
+            println("ffnet: $message")
         }
-
-    }).apply {
+    }.apply {
         this.level = HttpLoggingInterceptor.Level.BODY
     }
 
-//        logInterceptor.level = HttpLoggingInterceptor.Level.BODY
-
     private val okhttp = OkHttpClient.Builder()
         .addInterceptor(logInterceptor)
-//        .readTimeout(TIMEOUT, TimeUnit.SECONDS)
+        .readTimeout(TIMEOUT, TimeUnit.SECONDS)
         .build()
-//
-//        val gson = GsonBuilder()
-//                .registerTypeAdapter(LocalDateTime::class.java, JsonToDateTimeConverter())
-//                .create()
+
+//    private val gson = GsonBuilder()
+//            .registerTypeAdapter(Number::class.java, BooleanTypeAdapter())
+//            .create()
 
 
     private val retrofit: Retrofit = Retrofit.Builder()

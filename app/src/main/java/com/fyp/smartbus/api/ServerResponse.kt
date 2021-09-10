@@ -12,8 +12,14 @@ data class BusResponse(
         var response: Bus? = null
 )
 
-data class BusOnlineResponse(
+data class StringResponse(
         var status: Int,
         var error: String? = null,
-        var response: BusOnline? = null
+        var response: String? = null
+)
+
+data class BusListResponse(
+        var status: Int,
+        var error: String? = null,
+        var response: List<Bus> = listOf()
 )

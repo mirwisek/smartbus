@@ -31,6 +31,7 @@ const val KEY_USERNAME = "username"
 const val KEY_EMAIL = "email"
 const val KEY_PASSWORD = "password"
 const val KEY_USERTYPE = "usertype"
+const val KEY_IS_DRIVING = "isDrivingLocationOn"
 const val KEY_FOREGROUND_ENABLED = "tracking_foreground_location"
 const val LOCATION_LATLNG = "location_latlng"
 const val DRIVER_UID = "driver_uid"
@@ -40,11 +41,12 @@ const val NOTIFICATION_ID = 123
 const val PACKAGE_NAME = "com.fyp.smartbus"
 
 const val ACTION_LOCATION_BROADCAST = "$PACKAGE_NAME.location.broadcast"
+const val ACTION_LOCTION_TOGGLED = "$PACKAGE_NAME.location.stop"
+const val EXTRA_IS_DRIVING = "$PACKAGE_NAME.location.toggle"
 
 const val EXTRA_LOCATION = "$PACKAGE_NAME.extra.LOCATION"
 
-const val EXTRA_CANCEL_LOCATION_TRACKING_FROM_NOTIFICATION =
-    "$PACKAGE_NAME.extra.CANCEL_LOCATION_TRACKING_FROM_NOTIFICATION"
+const val EXTRA_STOP_LOCATION_TRACKING = "$PACKAGE_NAME.extra.STOP_LOCATION_TRACKING"
 const val REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE = 34
 /*
     * =========== KOTLIN - EXTENSIONS
