@@ -1,4 +1,4 @@
-package com.fyp.smartbus.api
+package com.fyp.smartbus.api.app
 
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -18,5 +18,11 @@ interface ApiRequest {
 
     @GET("/getBuses")
     fun getAllBuses() : Call<BusListResponse>
+
+    @GET("/maps/api/directions/json?key=AIzaSyAfsf6IFxoAKQTfxmX0RuBXKtwKrMYt7VM")
+    fun getJson(@Query("origin") origin: String,
+                @Query("destination") dest: String,
+                @Query("mode") mode: String): Call<DirectionResult>
+    https://maps.googleapis.com/
 
 }

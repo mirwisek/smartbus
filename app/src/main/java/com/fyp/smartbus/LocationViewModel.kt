@@ -3,7 +3,7 @@ package com.fyp.smartbus
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.fyp.smartbus.api.Bus
+import com.fyp.smartbus.api.app.Bus
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Polyline
 

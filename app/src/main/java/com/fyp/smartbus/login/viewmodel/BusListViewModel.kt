@@ -3,8 +3,8 @@ package com.fyp.smartbus.login.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.fyp.smartbus.api.ApiHelper
-import com.fyp.smartbus.api.Bus
+import com.fyp.smartbus.api.app.ApiHelper
+import com.fyp.smartbus.api.app.Bus
 
 class BusListViewModel(private val app: Application) : AndroidViewModel(app)  {
 

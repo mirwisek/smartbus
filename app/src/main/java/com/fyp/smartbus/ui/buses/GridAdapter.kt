@@ -1,14 +1,13 @@
 package com.fyp.smartbus.ui.buses
 
 import android.content.Context
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.fyp.smartbus.R
-import com.fyp.smartbus.api.Bus
+import com.fyp.smartbus.api.app.Bus
 import com.fyp.smartbus.databinding.RvBusItemBinding
 
 class GridAdapter(private val context: Context, private val onClick: (bus: Bus) -> Unit) :

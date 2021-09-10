@@ -9,8 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.fyp.smartbus.MainActivity
 import com.fyp.smartbus.R
-import com.fyp.smartbus.api.Bearings
-import com.fyp.smartbus.api.Bus
+import com.fyp.smartbus.api.app.Bearings
+import com.fyp.smartbus.api.app.Bus
 import com.fyp.smartbus.login.viewmodel.BusListViewModel
 import com.fyp.smartbus.utils.*
 import com.google.android.gms.maps.CameraUpdateFactory
