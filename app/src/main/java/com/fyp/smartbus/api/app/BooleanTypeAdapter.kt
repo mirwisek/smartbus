@@ -1,4 +1,4 @@
-package com.fyp.smartbus.api
+package com.fyp.smartbus.api.app
 
 import com.google.gson.*
 import java.lang.reflect.Type

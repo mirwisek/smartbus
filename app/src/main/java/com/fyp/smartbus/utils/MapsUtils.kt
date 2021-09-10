@@ -21,7 +21,7 @@ object MapsUtils {
 
     fun getDriverMarkerOptions(location: LatLng): MarkerOptions {
         val options = MarkerOptions()
-            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_bus))
+            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_bus_online))
             .position(LatLng(location.latitude, location.longitude))
         options.anchor(0.5F, 0.5F)
         options.flat(true)

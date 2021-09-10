@@ -10,7 +10,7 @@
             android:title="@string/menu_home" />
         <item
             android:id="@+id/nav_buses"
-            android:icon="@drawable/ic_bus"
+            android:icon="@drawable/ic_bus_online"
             android:title="@string/menu_buses" />
     </group>
 </menu>

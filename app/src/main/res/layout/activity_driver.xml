@@ -57,7 +57,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:text="@string/start_driving"
-        app:icon="@drawable/ic_bus"
+        app:icon="@drawable/ic_bus_online"
         app:iconTint="@color/white"
         android:textColor="@color/white"
         app:backgroundTint="@color/colorPrimaryDark"

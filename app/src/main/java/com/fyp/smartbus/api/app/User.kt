@@ -1,4 +1,4 @@
-package com.fyp.smartbus.api
+package com.fyp.smartbus.api.app
 
 import java.util.*
 
@@ -21,5 +21,10 @@ data class Bus(
         var busno: String? = null,
         var lastloc : String? = null,
         var currentloc : String? = null
+)
+
+data class Bearings(
+        var oldBearing: Float,
+        var newBearing: Float
 )
 

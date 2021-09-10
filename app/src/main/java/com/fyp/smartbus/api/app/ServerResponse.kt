@@ -1,4 +1,4 @@
-package com.fyp.smartbus.api
+package com.fyp.smartbus.api.app
 
 data class UserResponse(
         var status: Int,

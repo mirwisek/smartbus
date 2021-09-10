@@ -1,14 +1,8 @@
-package com.fyp.smartbus.api
+package com.fyp.smartbus.api.app
 
 import android.util.Log
-import com.fyp.smartbus.utils.log
-import com.google.gson.GsonBuilder
-import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
@@ -18,7 +12,7 @@ object NetworkFactory {
 
     private const val TIMEOUT = 70L
 
-    private const val URL_BASE = "http://192.168.10.5:3006/"
+    private const val URL_BASE = "http://192.168.10.8:3006/"
 
     private val logInterceptor = HttpLoggingInterceptor { message ->
         try {

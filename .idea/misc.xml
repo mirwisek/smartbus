@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Mir/Work/SmartBus/app/src/main/res/drawable/ic_bus_marker.xml" value="0.4583333333333333" />
+        <entry key="..\:/Mir/Work/SmartBus/app/src/main/res/drawable/ic_bus_offline.xml" value="0.4583333333333333" />
+        <entry key="..\:/Mir/Work/SmartBus/app/src/main/res/drawable/ic_bus_online.xml" value="0.4583333333333333" />
         <entry key="..\:/Mir/Work/SmartBus/app/src/main/res/layout/activity_driver.xml" value="0.275" />
         <entry key="..\:/Mir/Work/SmartBus/app/src/main/res/layout/activity_driving.xml" value="0.4071557971014493" />
         <entry key="..\:/Mir/Work/SmartBus/app/src/main/res/layout/activity_registration.xml" value="0.4071557971014493" />

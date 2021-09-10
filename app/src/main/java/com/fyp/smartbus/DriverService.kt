@@ -16,9 +16,9 @@ import android.os.Looper
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.edit
-import com.fyp.smartbus.api.ApiHelper
-import com.fyp.smartbus.api.Bus
-import com.fyp.smartbus.api.User
+import com.fyp.smartbus.api.app.ApiHelper
+import com.fyp.smartbus.api.app.Bus
+import com.fyp.smartbus.api.app.User
 import com.fyp.smartbus.utils.*
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
