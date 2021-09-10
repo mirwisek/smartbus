@@ -15,6 +15,7 @@ import com.fyp.smartbus.login.viewmodel.RegisterViewModel
 import com.fyp.smartbus.ui.CheckMaterialButton
 import com.fyp.smartbus.utils.*
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
 class RegistrationFragment : Fragment() {
 
@@ -29,6 +30,7 @@ class RegistrationFragment : Fragment() {
     private lateinit var etBus: TextInputEditText
 //    private lateinit var toggleType: MaterialButtonToggleGroup
     private lateinit var btnStudentType: CheckMaterialButton
+    private lateinit var tlbus: TextInputLayout
     private lateinit var btnDriverType: CheckMaterialButton
     private lateinit var btnRegister: Button
     private lateinit var progressBar: ProgressBar
@@ -58,21 +60,23 @@ class RegistrationFragment : Fragment() {
         etUserName = view.findViewById(R.id.etusernameregister)
         etBus = view.findViewById(R.id.etbus)
 //        toggleType = view.findViewById(R.id.toggleType)
+        tlbus = view.findViewById(R.id.tlbus)
         btnStudentType = view.findViewById(R.id.btnStudent)
         btnDriverType = view.findViewById(R.id.btnDriver)
         btnRegister = view.findViewById(R.id.btnregister)
 
 //        btnStudentType.isSelected = true
 
-        btnStudentType.addCustomCheckedChangedListener { button, isChecked ->
+        btnStudentType.addCustomCheckedChangedListener { toggleType, isChecked ->
             if (isChecked) {
-                // Student
-                etBus.gone()
-                etBus.isClickable = false
+                // Students
+                tlbus.gone()
+                tlbus.isClickable = false
             } else {
                 // driver
-                etBus.visible()
-                etBus.isClickable
+                btnStudentType
+                tlbus.visible()
+                tlbus.isClickable
             }
         }
 

@@ -148,8 +148,9 @@
         android:dividerPadding="0dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="@id/tlbus"
-        app:layout_constraintStart_toStartOf="@id/tlbus"
+        app:selectionRequired="true"
+        app:layout_constraintEnd_toEndOf="@id/tlnameregister"
+        app:layout_constraintStart_toStartOf="@id/tlnameregister"
         app:layout_constraintTop_toBottomOf="@id/tlbus"
         app:singleSelection="true">
 
@@ -159,7 +160,6 @@
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_weight="1"
-            android:checkable="true"
             android:text="@string/student" />
 
         <com.fyp.smartbus.ui.CheckMaterialButton
@@ -168,7 +168,6 @@
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_weight="1"
-            android:checkable="true"
             android:text="@string/driver" />
 
     </com.google.android.material.button.MaterialButtonToggleGroup>
