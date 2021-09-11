@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.fyp.smartbus">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -9,13 +10,14 @@
 
     <application
         android:name=".SmartBusApp"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.SmartBus">
+        android:theme="@style/Theme.SmartBus"
+        tools:targetApi="n">
         <activity
             android:name=".login.SplashScreenActivity"
             android:exported="true"
@@ -27,15 +29,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DriverActivity"
+            android:name=".ui.DriverActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.DrivingActivity"
             android:exported="true"
             android:theme="@style/Theme.SmartBus.NoActionBar" />
         <activity
-            android:name=".DrivingActivity"
-            android:exported="true"
-            android:theme="@style/Theme.SmartBus.NoActionBar" />
-        <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.SmartBus.NoActionBar" />
         <activity
@@ -44,7 +45,7 @@
             android:label="@string/title_activity_login"
             android:theme="@style/Theme.SmartBus.Fullscreen" />
         <activity
-            android:name=".login.AdminActivity"
+            android:name=".ui.AdminActivity"
             android:label="Admin User Management" />
 
         <service

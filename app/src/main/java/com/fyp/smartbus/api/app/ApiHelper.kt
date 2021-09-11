@@ -56,7 +56,7 @@ object ApiHelper {
                 } else if (response.code() == 403) {
                     onResult(Result.failure(Exception("Email Not Sent/Not Found!!")))
                 } else {
-                    onResult(Result.failure(Exception("Server Error...")))
+                    onResult(Result.failure(Exception("Server Error: ${body?.error}")))
                 }
             }
 

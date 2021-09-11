@@ -11,8 +11,6 @@ import android.view.animation.Interpolator
 import android.view.animation.LinearInterpolator
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
-import com.fyp.smartbus.MainActivity
-import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker

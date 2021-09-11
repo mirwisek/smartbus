@@ -104,6 +104,7 @@ router.post('/forgot-password', (req, res) => {
       send(res, 403, "Email Sending Error", null)
     }
   }).catch((err) => {
+    console.log(err)
     send(res, 500, err, null)
   })
 });

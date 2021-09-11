@@ -7,13 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import com.fyp.smartbus.MainActivity
+import com.fyp.smartbus.ui.MainActivity
 import com.fyp.smartbus.databinding.FragmentBusListBinding
-import com.fyp.smartbus.login.viewmodel.BusListViewModel
-import com.fyp.smartbus.ui.home.HomeFragment
-import com.fyp.smartbus.ui.home.HomeFragmentArgs
 import com.fyp.smartbus.utils.invisible
-import com.fyp.smartbus.utils.log
+import com.fyp.smartbus.viewmodel.BusListViewModel
 import com.fyp.smartbus.utils.toast
 import com.fyp.smartbus.utils.visible
 

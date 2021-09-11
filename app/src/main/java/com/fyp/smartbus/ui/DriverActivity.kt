@@ -1,4 +1,4 @@
-package com.fyp.smartbus
+package com.fyp.smartbus.ui
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -8,11 +8,15 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.lifecycle.ViewModelProvider
+import com.fyp.smartbus.*
 import com.fyp.smartbus.databinding.ActivityDriverBinding
-import com.fyp.smartbus.login.viewmodel.DriverViewModel
+import com.fyp.smartbus.login.RegistrationActivity
+import com.fyp.smartbus.viewmodel.DriverViewModel
 import com.fyp.smartbus.utils.*
 import com.google.android.material.snackbar.Snackbar
 
@@ -186,5 +190,28 @@ class DriverActivity : AppCompatActivity() {
             val isDriving = intent.getBooleanExtra(EXTRA_IS_DRIVING, false)
             vmDriver.isDriving.postValue(isDriving)
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_sign_out -> {
+                signOut()
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
+        }
+    }
+
+    private fun signOut() {
+        sharedPref.edit().clear().apply()
+        switchActivity(RegistrationActivity::class.java)
     }
 }

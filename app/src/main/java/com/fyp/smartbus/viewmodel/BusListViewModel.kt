@@ -1,11 +1,10 @@
-package com.fyp.smartbus.login.viewmodel
+package com.fyp.smartbus.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.fyp.smartbus.api.app.ApiHelper
 import com.fyp.smartbus.api.app.Bus
-import com.fyp.smartbus.api.directions.DirectionResult
 import com.fyp.smartbus.api.directions.DirectionsHelper
 import com.fyp.smartbus.api.directions.Route
 import com.fyp.smartbus.utils.log

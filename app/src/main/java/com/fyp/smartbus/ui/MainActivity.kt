@@ -1,9 +1,8 @@
-package com.fyp.smartbus
+package com.fyp.smartbus.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
@@ -17,21 +16,20 @@ import androidx.core.app.ActivityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
-import androidx.navigation.NavOptions
-import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.fyp.smartbus.R
+import com.fyp.smartbus.REQUEST_CHECK_SETTINGS
 import com.fyp.smartbus.api.app.Bus
+import com.fyp.smartbus.enableGPS
+import com.fyp.smartbus.isLocationEnabled
 import com.fyp.smartbus.login.RegistrationActivity
-import com.fyp.smartbus.login.viewmodel.BusListViewModel
+import com.fyp.smartbus.viewmodel.BusListViewModel
 import com.fyp.smartbus.ui.buses.BusListFragmentDirections
-import com.fyp.smartbus.ui.home.HomeFragment
-import com.fyp.smartbus.ui.home.HomeFragmentArgs
 import com.fyp.smartbus.utils.sharedPref
-import com.fyp.smartbus.utils.toLatLng
 import com.fyp.smartbus.utils.toast
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory

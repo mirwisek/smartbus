@@ -1,7 +1,7 @@
 package com.fyp.smartbus.ui.home
 
-import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
@@ -9,13 +9,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
-import com.fyp.smartbus.MainActivity
+import com.fyp.smartbus.ui.MainActivity
 import com.fyp.smartbus.R
 import com.fyp.smartbus.api.app.Bearings
 import com.fyp.smartbus.api.app.Bus
 import com.fyp.smartbus.databinding.FragmentHomeBinding
-import com.fyp.smartbus.login.viewmodel.BusListViewModel
-import com.fyp.smartbus.ui.buses.BusListFragmentDirections
+import com.fyp.smartbus.viewmodel.BusListViewModel
 import com.fyp.smartbus.utils.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -24,6 +23,8 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.maps.android.PolyUtil
 import com.google.maps.android.SphericalUtil
+import java.util.*
+import kotlin.collections.HashMap
 
 class HomeFragment : Fragment(), OnMapReadyCallback {
 
@@ -38,6 +39,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private var bearings: HashMap<String, Bearings> = hashMapOf()
 
     private val args: HomeFragmentArgs by navArgs()
+    private var timer: Timer? = null // For directions auto update
 
     companion object {
         const val TAG = "FragmentHomeTag"
@@ -80,7 +82,9 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
 
         vmBusList.busList.observe(viewLifecycleOwner) { bList ->
-            val b = vmBusList.selectedBus.value
+
+            val selectedBus = vmBusList.selectedBus.value
+
             bList.forEach { bus ->
                 var icon = R.drawable.ic_bus_marker_offline
                 if (bus.isonline == true) {
@@ -100,13 +104,12 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                             marker.setIcon(BitmapDescriptorFactory.fromResource(icon))
                             marker.animateMarker(bus, lastLoc, currentLoc)
                         }
-                    }
 
-                    log("The value of b is $b")
-                    // If the selected bus location has updated then update the ETA
-                    if(b != null && b.busno == bus.busno && b.currentloc != bus.currentloc) {
-                        log("Updating ETA")
-                        vmBusList.getDirections(mainActivity.currentLocation!!)
+                        // If the selected bus is updated and online the update eta
+                        if(selectedBus?.email == bus.email && bus.isonline == true) {
+                            log("Updated selected bus ${bus.email}")
+                            vmBusList.selectedBus.postValue(bus)
+                        }
                     }
                 } else {
                     // Just draw them
@@ -118,6 +121,9 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         // Show directions
         vmBusList.busDirections.observe(viewLifecycleOwner) { route ->
             route.overviewPolyLine?.points?.let { points ->
+
+                polyLine?.remove()  // Remove any previous polyline, in case of update
+
                 val poly = PolyUtil.decode(points)
                 polyLine = mMap.addPolyline(
                     PolylineOptions()
@@ -125,7 +131,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                         .width(22f)
                         .addAll(poly)
                 )
-
                 mainActivity.addCurrentLocationMarker()
 
                 // Set camera zoom level to fit the polyline
@@ -156,6 +161,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                     mainActivity.markerCurrentLoc?.remove()
                     polyLine = null
                     mainActivity.markerCurrentLoc = null
+                    timer?.cancel() // Stop the auto updates
+                    timer = null
                 }
             }
         }
@@ -170,6 +177,37 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                 val mOptions = requireContext().getBusMarkerOptions(location.toLatLng(), it, icon)
                 busMarkers.getOrElse(it, { null })?.remove()
                 busMarkers[it] = mMap.addMarker(mOptions)!!
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        vmBusList.selectedBus.value?.let {
+            log("Timer scheduled")
+            scheduleTimer()
+        }
+    }
+
+    private fun scheduleTimer() {
+        timer = Timer().apply {
+            // Call each 10sec twice the location update rate to save API cost ofcourse
+            scheduleAtFixedRate(newDirectionsFetchTask(), 0L, 10000L)
+        }
+    }
+
+    override fun onPause() {
+        timer?.cancel()
+        super.onPause()
+    }
+
+    private fun newDirectionsFetchTask(): TimerTask {
+        return object: TimerTask() {
+            override fun run() {
+                mainActivity.currentLocation?.let {
+                    log("Updating directions")
+                    vmBusList.getDirections(it)
+                }
             }
         }
     }
@@ -189,7 +227,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
             b = bearings[busNo]!!
         }
         val shouldRotate = b.oldBearing != b.newBearing
-        log("Bearing is $b and $shouldRotate")
         animateMarkerToGB(
             currentLoc, shouldRotate,
             LatLngInterpolator.Spherical(), bearing, Looper.getMainLooper()

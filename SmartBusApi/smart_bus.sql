@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 05, 2021 at 12:45 PM
--- Server version: 10.4.13-MariaDB
--- PHP Version: 7.4.7
+-- Generation Time: Sep 11, 2021 at 11:31 AM
+-- Server version: 10.4.20-MariaDB
+-- PHP Version: 7.3.29
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,33 +20,9 @@ SET time_zone = "+00:00";
 --
 -- Database: `smart_bus`
 --
-
--- --------------------------------------------------------
-
---
--- Table structure for table `buses`
---
-
-CREATE TABLE `buses` (
-  `email` varchar(30) NOT NULL,
-  `isonline` tinyint(1) NOT NULL DEFAULT 0,
-  `currentloc` varchar(20) DEFAULT NULL,
-  `lastloc` varchar(20) DEFAULT NULL,
-  `busno` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `buses`
---
-
-INSERT INTO `buses` (`email`, `isonline`, `currentloc`, `lastloc`, `busno`) VALUES
-('1@gmail.com', 0, NULL, '30.1774915,67.009490', 'ACB-3121'),
-('2@gmail.com', 0, NULL, NULL, 'ACB-3121'),
-('3@gmail.com', 0, NULL, NULL, 'BCD-1231'),
-('4@gmail.com', 0, NULL, NULL, 'EFG-4321'),
-('5@gmail.com', 0, NULL, NULL, 'HIJ-9999'),
-('m@gmail.com', 0, NULL, '30.1774738,67.009514', '1212'),
-('zain123@gmail.com', 1, '124', '123', 'a123');
+DROP DATABASE IF EXISTS `smart_bus`;
+CREATE DATABASE `smart_bus`;
+USE `smart_bus`;
 
 -- --------------------------------------------------------
 
@@ -66,18 +42,17 @@ CREATE TABLE `registration` (
 --
 
 INSERT INTO `registration` (`email`, `username`, `password`, `usertype`) VALUES
-('zain671997@gmail.com', 'zain123', 'zainzain', 'D'),
-('zain@gmial.com', 'zain', '12345', 'S');
+('1@gmail.com', 'Asmatullah', 'driver123', 'D'),
+('2@gmail.com', 'Asmatullah', 'driver123', 'D'),
+('3@gmail.com', 'Jahanzaib', 'driver123', 'D'),
+('4@gmail.com', 'Bakhsu', 'driver123', 'D'),
+('5@gmail.com', 'Nizam', 'driver123', 'D'),
+('admin@gmail.com', 'Admin', 'admin123', 'A'),
+('k@gmail.com', 'Khan', 'khan123', 'S');
 
 --
 -- Indexes for dumped tables
 --
-
---
--- Indexes for table `buses`
---
-ALTER TABLE `buses`
-  ADD PRIMARY KEY (`email`);
 
 --
 -- Indexes for table `registration`

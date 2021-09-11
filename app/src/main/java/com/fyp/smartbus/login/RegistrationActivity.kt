@@ -3,10 +3,11 @@ package com.fyp.smartbus.login
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.fyp.smartbus.DriverActivity
-import com.fyp.smartbus.MainActivity
+import com.fyp.smartbus.ui.DriverActivity
+import com.fyp.smartbus.ui.MainActivity
 import com.fyp.smartbus.R
-import com.fyp.smartbus.login.viewmodel.FullScreenViewModel
+import com.fyp.smartbus.viewmodel.FullScreenViewModel
+import com.fyp.smartbus.ui.AdminActivity
 import com.fyp.smartbus.utils.switchActivity
 
 class RegistrationActivity : AppCompatActivity() {

@@ -15,6 +15,6 @@ class SplashScreenActivity : AppCompatActivity() {
 
         Handler(Looper.getMainLooper()).postDelayed({
             switchActivity(RegistrationActivity::class.java)
-        }, 2000L)
+        }, 1200L)
     }
 }

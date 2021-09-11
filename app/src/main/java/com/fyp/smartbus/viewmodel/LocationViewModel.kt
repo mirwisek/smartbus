@@ -1,4 +1,4 @@
-package com.fyp.smartbus
+package com.fyp.smartbus.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

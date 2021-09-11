@@ -1,4 +1,4 @@
-package com.fyp.smartbus.login.viewmodel
+package com.fyp.smartbus.viewmodel
 
 import android.app.Application
 import android.util.Patterns

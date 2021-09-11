@@ -1,37 +1,24 @@
-package com.fyp.smartbus
+package com.fyp.smartbus.ui
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.*
-import android.content.pm.PackageManager
 import android.location.Location
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
-import android.os.Looper
-import android.provider.Settings
-import android.view.Gravity.CENTER
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
-import androidx.lifecycle.ViewModelProvider
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.fyp.smartbus.DriverLocationService
+import com.fyp.smartbus.R
 import com.fyp.smartbus.databinding.ActivityDrivingBinding
+import com.fyp.smartbus.viewmodel.LocationViewModel
 import com.fyp.smartbus.utils.*
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-import com.google.android.material.snackbar.Snackbar
-import com.google.maps.android.PolyUtil
 
 /**
  * Activity to show maps

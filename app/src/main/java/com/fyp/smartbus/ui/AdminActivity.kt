@@ -1,21 +1,16 @@
-package com.fyp.smartbus.login
+package com.fyp.smartbus.ui
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.fyp.smartbus.R
 import com.fyp.smartbus.databinding.ActivityAdminBinding
-import com.fyp.smartbus.databinding.FragmentBusListBinding
-import com.fyp.smartbus.login.viewmodel.AdminViewModel
+import com.fyp.smartbus.login.RegistrationActivity
 import com.fyp.smartbus.ui.admin.UsersAdapter
+import com.fyp.smartbus.viewmodel.AdminViewModel
 import com.fyp.smartbus.utils.*
-import java.util.*
 
 class AdminActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,13 +48,12 @@ class AdminActivity : AppCompatActivity() {
                     text = "There are no user accounts!"
                     visible()
                 }
-                binding.progress.invisible()
             } else {
-                binding.progress.invisible()
                 binding.error.invisible()
                 binding.rvUsers.visible()
                 adapter.updateList(list)
             }
+            binding.progress.invisible()
         }
 
         vmAdmin.error.observe(this) { e ->

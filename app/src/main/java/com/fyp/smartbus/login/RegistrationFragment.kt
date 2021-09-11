@@ -11,7 +11,7 @@ import android.widget.*
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.fyp.smartbus.R
-import com.fyp.smartbus.login.viewmodel.RegisterViewModel
+import com.fyp.smartbus.viewmodel.RegisterViewModel
 import com.fyp.smartbus.ui.CheckMaterialButton
 import com.fyp.smartbus.utils.*
 import com.google.android.material.button.MaterialButtonToggleGroup
