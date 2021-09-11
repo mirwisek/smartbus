@@ -12,17 +12,25 @@ const {
   getBuses,
   postemail,
   postparams,
-  getparams
+  getparams,
+  getAccounts
 } = require("./controller");
 
-router.get("/getbus", (req, res) => {
-  getBus(req.fields).then((r) => {
-    // console.log("r: " + r)
-    if (r.length > 0) {
-      send(res, 200, null, r[0])
-    } else {
-      send(res, 403, "No User/Location Found...", null)
-    }
+// router.get("/getbus", (req, res) => {
+//   getBus(req.fields).then((r) => {
+//     if (r.length > 0) {
+//       send(res, 200, null, r[0])
+//     } else {
+//       send(res, 403, "No User/Location Found...", null)
+//     }
+//   }).catch((err) => {
+//     send(res, 500, err, null)
+//   })
+// });
+
+router.get('/getAccounts', (req, res) => {
+  getAccounts().then((r) => {
+    send(res, 200, null, r)
   }).catch((err) => {
     send(res, 500, err, null)
   })
@@ -65,9 +73,15 @@ router.patch("/updatebus", (req, res) => {
   })
 });
 
-router.delete("/deleteuser", (req, res) => {
-  deleteU(req.body).then((r) => {
-    send(r, 200, null, "Deleted Successfully")
+router.post("/deleteUser", (req, res) => {
+  deleteU(req.fields).then((r) => {
+    if(r.affectedRows > 0) {
+      send(res, 200, null, "Deleted Successfully")
+    } else if(r.affectedRows == -100) {
+      send(res, 403, 'No user found with the given email', null)
+    } else {
+      send(res, 400, 'Could not delete the user', null)
+    }
   }).catch((err) => {
     send(res, 500, err, null)
   })
@@ -82,10 +96,7 @@ router.get('/forgot-password', (req, res) => {
 });
 
 router.post('/forgot-password', (req, res) => {
-  // console.log("beforeR: "+ JSON.stringify(req.fields))
   postemail(req.fields).then((r) => {
-    // console.log("R: " + JSON.stringify(r.envelope))
-    // console.log("Length: "+ JSON.stringify(r.length))
     if (r.envelope != null) {
       send(res, 200, null, "Email Sent")
     } else {
@@ -98,15 +109,7 @@ router.post('/forgot-password', (req, res) => {
 });
 
 router.get('/reset-password/:email/:token', (req, res) => {
-  // console.log("paramsR: "+JSON.stringify(req.params))
-  // data = {
-  //   token: req.params,
-  //   email
-  // }
   getparams(req.params).then((r) => {
-    // console.log("resultR: "+JSON.stringify(r))
-    // console.log("resultR: "+r[0].email)
-
     if (r.length > 0) {
       res.render('reset-password', { email: r[0].email })
     } else {

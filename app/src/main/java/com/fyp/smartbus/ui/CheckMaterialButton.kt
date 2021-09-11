@@ -32,6 +32,7 @@ class CheckMaterialButton : MaterialButton,
         addOnCheckedChangeListener(listener)
     }
 
+
     override fun onCheckedChanged(button: MaterialButton?, isChecked: Boolean) {
         button?.let {
             if (isChecked) {

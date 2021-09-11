@@ -96,10 +96,13 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                             addStaticMarker(bus, icon)
                         } else {
                             // Otherwise just animate it
+                            // Make sure icon online status is set
+                            marker.setIcon(BitmapDescriptorFactory.fromResource(icon))
                             marker.animateMarker(bus, lastLoc, currentLoc)
                         }
                     }
 
+                    log("The value of b is $b")
                     // If the selected bus location has updated then update the ETA
                     if(b != null && b.busno == bus.busno && b.currentloc != bus.currentloc) {
                         log("Updating ETA")

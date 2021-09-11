@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#2DB788</color>
-    <color name="colorRipple">#592DB788</color>
+    <color name="colorRipple">#C3FFC8A4</color>
     <color name="colorPrimaryDark">#C62828</color>
     <color name="colorAccent">#FF8121</color>
     <color name="colorOnPrimary">@color/white</color>

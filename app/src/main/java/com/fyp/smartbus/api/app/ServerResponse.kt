@@ -23,3 +23,9 @@ data class BusListResponse(
         var error: String? = null,
         var response: List<Bus> = listOf()
 )
+
+data class AccountsResponse(
+        var status: Int,
+        var error: String? = null,
+        var response: List<User> = listOf()
+)

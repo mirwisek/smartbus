@@ -18,13 +18,11 @@ object ApiHelper {
                 addFormDataPart("usertype", user.usertype!!)
             }.build()
 
-//        log("inside network signup...${requestBody.toString()}")
         NetworkFactory.service.createUser(requestBody).enqueue(object : Callback<UserResponse> {
             override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
                 val body = response.body()
                 if (response.code() == 200) {
 //                    log("inside createUser network...${body?.response.toString()}")
-//                    Toast.makeText(, "Register Successfully", Toast.LENGTH_SHORT).show()
                     onResult(Result.success(body?.response!!))
 //                    onResult(Result.success("Register Successfully."))
                 } else if (response.code() == 304) { // On Duplicate, is not error
@@ -56,7 +54,6 @@ object ApiHelper {
         NetworkFactory.service.loginUser(requestBody).enqueue(object : Callback<UserResponse> {
             override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
                 val body = response.body()
-                log("inside network login...${response.body()}")
                 if (response.code() == 200 && body != null) {
                     onResult(Result.success(body.response!!))
                 } else if (response.code() == 403) {
@@ -87,7 +84,6 @@ object ApiHelper {
         NetworkFactory.service.updateBus(requestBodyUpdate).enqueue(object : Callback<StringResponse> {
             override fun onResponse(call: Call<StringResponse>, response: Response<StringResponse>) {
                 val body = response.body()
-                log("inside network login...${response.body()}")
                 if (response.code() == 200) {
                     onResult(Result.success(body?.response!!))
                 } else if (response.code() == 403) {
@@ -120,6 +116,60 @@ object ApiHelper {
 
             override fun onFailure(call: Call<BusListResponse>, t: Throwable) {
                 log("On failure called network... ${t.message}")
+                onResult(Result.failure(t))
+            }
+
+        })
+    }
+
+    fun getAllUsers(onResult: (Result<List<User>>) -> Unit) {
+
+        NetworkFactory.service.getAllUsers().enqueue(object : Callback<AccountsResponse> {
+            override fun onResponse(call: Call<AccountsResponse>, response: Response<AccountsResponse>) {
+                val body = response.body()
+                if (response.code() == 200) {
+                    // Empty list if null
+                    onResult(Result.success(body?.response ?: listOf()))
+                } else {
+                    onResult(Result.failure(Exception("Server Error...")))
+                }
+            }
+
+            override fun onFailure(call: Call<AccountsResponse>, t: Throwable) {
+                log("On failure called network... ${t.message}")
+                onResult(Result.failure(t))
+            }
+        })
+    }
+
+    fun deleteUser(email: String, onResult: (Result<String>) -> Unit) {
+        val requestBodyDel = MultipartBody.Builder()
+            .setType(MultipartBody.FORM).apply {
+                addFormDataPart("email", email)
+            }.build()
+
+        NetworkFactory.service.deleteUser(requestBodyDel).enqueue(object : Callback<StringResponse> {
+            override fun onResponse(call: Call<StringResponse>, response: Response<StringResponse>) {
+                val body = response.body()
+                log("inside network login...${response.body()}")
+                when(response.code()) {
+                    200 -> {
+                        onResult(Result.success(body?.response!!))
+                    }
+                    403 -> {
+                        onResult(Result.failure(Exception("Email is incorrect/Not Found!!")))
+                    }
+                    400 -> {
+                        onResult(Result.failure(Exception("Couldn't delete the record")))
+                    }
+                    else -> {
+                        onResult(Result.failure(Exception("Server Error: " + body?.error)))
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<StringResponse>, t: Throwable) {
+                log("[Delete User] On failure called network... ${t.message}")
                 onResult(Result.failure(t))
             }
 

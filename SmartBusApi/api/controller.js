@@ -6,13 +6,24 @@ let {
 	doesUserExist,
 	login,
 	checkUserExist,
-	updatepass
+	updatepass,
+	getAllUsers,
+	deleteBus
 } = require("./service");
 require("promise");
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 
 const JWT_SECRET = process.env.JWT_SECRET
+
+// For admin management
+getAccounts = () => new Promise((resolve, reject) => {
+	getAllUsers().then(results => {
+		resolve(results)
+	}).catch(e => {
+		reject(e)
+	})
+});
 
 createUser = (body) => new Promise((resolve, reject) => {
 	// console.log("body: "+JSON.stringify(body))
@@ -60,17 +71,16 @@ updateB = (body) => new Promise((resolve, reject) => {
 });
 
 deleteU = (body) => new Promise((resolve, reject) => {
-	deleteUser(body).then((results) => {
-		//if record not found then 
-		if (results) {
-			resolve(results)
-
+	// Delete from both tables
+	deleteUser(body).then((r) => {
+		if(r.affectedRows > 0) {
+			deleteBus(body).then((r2) => {
+				resolve(r2)
+			}).catch((error) => { reject(error) });
 		} else {
-			resolve(results)
+			resolve({'affectedRows': -100})
 		}
-	}).catch((error) => {
-		reject(error)
-	});
+	}).catch((e) => { reject(e) });
 });
 
 loginU = (body) => new Promise((resolve, reject) => {
@@ -204,6 +214,7 @@ postparams = (body, params) => new Promise((resolve, reject) => {
 
 
 module.exports = {
+	getAccounts,
 	createUser,
 	deleteU,
 	updateB,

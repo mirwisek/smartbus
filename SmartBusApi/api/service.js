@@ -3,6 +3,18 @@ const pool = require("../config/database");
 const tableRegistration = "registration"
 const tableBuses = "buses"
 
+getAllUsers = () => new Promise((resolve, reject) => {
+  pool.query(
+    `select r.email, r.username, r.usertype, b.busno from ${tableRegistration} AS r LEFT JOIN ${tableBuses} AS b ON r.email = b.email WHERE r.usertype != 'A' ORDER BY r.usertype DESC`,
+    (error, results) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    }
+  );
+})
 
 insertInUsers = (conn, data) => {
   return new Promise((resolve, reject) => {
@@ -139,37 +151,24 @@ updateBus = (data) => new Promise((resolve, reject) => {
       reject('At least one field `isonline` or `currentloc` must be provided')
     }
   }).catch((err) => { reject(err) })
-  // console.log("loc: "+loc)
-  // const columns = Object.keys(data)
-  // // console.log(columns, "keys")
-  // const values = Object.values(data)
-  // // console.log(values, "values")
-  // // current loc = selection
-  // // update current+loc = data.loc , last+loc = curren_loc
-  // let cols = columns.join(" = ? , ")
-  // let sql = `update ${tableBuses} set ${cols} = ? `
-  // console.log(sql)
-  // console.log(values)
-  // values.push(data.email)
-  // pool.query(
-  //   sql + ` where email = ?`,
-  //   values,
-  //   (error, results, fields) => {
-  //     if (error) {
-  //       reject(error);
-  //     } else {
-  //       let out = {
-  //         "affectedRows": results.affectedRows
-  //       }
-  //       resolve(out);
-  //     }
-  //   }
-  // );
 })
 
 deleteUser = (data) => new Promise((resolve, reject) => {
   pool.query(
     `delete from ${tableRegistration} where email = ?`,
+    [data.email],
+    (error, results) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
+      }
+    });
+})
+
+deleteBus = (data) => new Promise((resolve, reject) => {
+  pool.query(
+    `delete from ${tableBuses} where email = ?`,
     [data.email],
     (error, results) => {
       if (error) {
@@ -221,8 +220,7 @@ checkUserExist = (data) => new Promise((resolve, reject) => {
     `select email, password from ${tableRegistration} where email = ?`,
     [data.email],
     (error, results) => {
-      // console.log("beforeS: "+JSON.stringify(results))
-
+      
       if (error) {
         reject(error);
       } else {
@@ -264,8 +262,10 @@ getBusDetail = () => new Promise((resolve, reject) => {
 })
 
 module.exports = {
+  getAllUsers,
   create,
   deleteUser,
+  deleteBus,
   updateBus,
   doesUserExist,
   login,

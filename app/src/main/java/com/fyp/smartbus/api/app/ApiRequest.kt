@@ -19,4 +19,10 @@ interface ApiRequest {
     @GET("/getBuses")
     fun getAllBuses() : Call<BusListResponse>
 
+    @GET("/getAccounts")
+    fun getAllUsers() : Call<AccountsResponse>
+
+    @POST("/deleteUser")
+    fun deleteUser(@Body user: RequestBody) : Call<StringResponse>
+
 }

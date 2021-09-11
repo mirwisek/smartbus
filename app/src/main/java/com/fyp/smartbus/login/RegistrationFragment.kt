@@ -14,7 +14,9 @@ import com.fyp.smartbus.R
 import com.fyp.smartbus.login.viewmodel.RegisterViewModel
 import com.fyp.smartbus.ui.CheckMaterialButton
 import com.fyp.smartbus.utils.*
+import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
 class RegistrationFragment : Fragment() {
 
@@ -63,49 +65,34 @@ class RegistrationFragment : Fragment() {
         btnRegister = view.findViewById(R.id.btnregister)
 
 //        btnStudentType.isSelected = true
+        val tlBus = view.findViewById<TextInputLayout>(R.id.tlbus)
+        val tlNameRegister = view.findViewById<TextInputLayout>(R.id.tlnameregister)
 
-        btnStudentType.addCustomCheckedChangedListener { button, isChecked ->
-            if (isChecked) {
-                // Student
-                etBus.gone()
-                etBus.isClickable = false
+        val toggleGroup = view.findViewById<MaterialButtonToggleGroup>(R.id.toggleType)
+        toggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
+            if(checkedId == btnStudentType.id) {
+                tlBus.invisible()
+                tlNameRegister.hint = "Student Name"
             } else {
-                // driver
-                etBus.visible()
-                etBus.isClickable
+                tlBus.visible()
+                tlNameRegister.hint = "Driver Name"
             }
         }
 
-//        val tbusertype: String
-
-//        if (etUserType.isChecked){
-//            val tbusertype= etUserType.textOn.toString()
-//        }else {
-//             val tbusertype= etUserType.textOff.toString()
-//        }
-
-
+        btnStudentType.isChecked = true // initial selection
         progressBar = view.findViewById(R.id.progress)
-
-
-//        val emailtext = etEmail.text.toString()
-//        val passwordtext = etPass.text.toString()
-//        val usernametext = etUserType.text.toString()
-//        val usertypetext = etUserType.text.toString()
-
 
         view.findViewById<TextView>(R.id.tvSignIn).setOnClickListener {
 
             val fragLogin =
-                activity?.supportFragmentManager?.findFragmentByTag(AdminLoginFragment.TAG)
-                    ?: AdminLoginFragment()
+                activity?.supportFragmentManager?.findFragmentByTag(LoginFragment.TAG)
+                    ?: LoginFragment()
             activity?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.container, fragLogin, AdminLoginFragment.TAG)
+                ?.replace(R.id.container, fragLogin, LoginFragment.TAG)
                 ?.commit()
         }
         btnRegister.setOnClickListener {
             registerUser()
-//            toast(tbusertype)
         }
 
         val afterTextChangedListener = object : TextWatcher {
@@ -183,10 +170,10 @@ class RegistrationFragment : Fragment() {
                         toggleFormInput(true)
 //
                         val fragLogin =
-                            activity?.supportFragmentManager?.findFragmentByTag(AdminLoginFragment.TAG)
-                                ?: AdminLoginFragment()
+                            activity?.supportFragmentManager?.findFragmentByTag(LoginFragment.TAG)
+                                ?: LoginFragment()
                         activity?.supportFragmentManager?.beginTransaction()
-                            ?.replace(R.id.container, fragLogin, AdminLoginFragment.TAG)
+                            ?.replace(R.id.container, fragLogin, LoginFragment.TAG)
                             ?.commit()
 //                        switchActivity(MainActivity::class.java)
                     },

@@ -24,7 +24,7 @@
             android:defaultValue="@null"/>
 
     </fragment>
-
+    <!-- Popup to removes all the backStack, deep nested links-->
     <fragment
         android:id="@+id/nav_buses"
         android:name="com.fyp.smartbus.ui.buses.BusListFragment"
@@ -32,10 +32,16 @@
         tools:layout="@layout/fragment_bus_list" >
         <action
             android:id="@+id/action_show_map_directions"
+            app:launchSingleTop="true"
+            app:popUpToInclusive="true"
+            app:popUpTo="@id/nav_home"
             app:destination="@id/nav_home" />
 
         <action
             android:id="@+id/action_show_bus"
+            app:launchSingleTop="true"
+            app:popUpToInclusive="true"
+            app:popUpTo="@id/nav_home"
             app:destination="@id/nav_home" />
     </fragment>
 </navigation>

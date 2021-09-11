@@ -17,6 +17,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartBus">
         <activity
+            android:name=".login.SplashScreenActivity"
+            android:exported="true"
+            android:theme="@style/Theme.SmartBus.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".DriverActivity"
             android:exported="true"
             android:theme="@style/Theme.SmartBus.NoActionBar" />
@@ -32,19 +42,16 @@
             android:name=".login.RegistrationActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_login"
-            android:theme="@style/Theme.SmartBus.Fullscreen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/Theme.SmartBus.Fullscreen" />
+        <activity
+            android:name=".login.AdminActivity"
+            android:label="Admin User Management" />
 
         <service
             android:name=".DriverLocationService"
-            android:foregroundServiceType="location"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="false"
+            android:foregroundServiceType="location" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

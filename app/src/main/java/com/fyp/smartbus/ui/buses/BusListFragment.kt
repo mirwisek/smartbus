@@ -41,7 +41,7 @@ class BusListFragment : Fragment() {
             (requireActivity() as MainActivity).showBusOnMap(it)
         }
 
-        binding.rvBusList.apply {
+        binding.recyclerView.apply {
             this.adapter = adapter
             layoutManager = GridLayoutManager(requireContext(), 2)
         }
