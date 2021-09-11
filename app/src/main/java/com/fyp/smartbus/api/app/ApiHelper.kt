@@ -41,7 +41,32 @@ object ApiHelper {
         })
     }
 
+    fun forgotPass(email: String, onResult: (Result<String>) -> Unit) {
+        val requestBody = MultipartBody.Builder()
+            .setType(MultipartBody.FORM).apply {
+                addFormDataPart("email", email)
+            }.build()
 
+        NetworkFactory.service.forgotPass(requestBody).enqueue(object : Callback<StringResponse> {
+            override fun onResponse(call: Call<StringResponse>, response: Response<StringResponse>) {
+                val body = response.body()
+                log("inside network login...${response.body()}")
+                if (response.code() == 200) {
+                    onResult(Result.success(body?.response!!))
+                } else if (response.code() == 403) {
+                    onResult(Result.failure(Exception("Email Not Sent/Not Found!!")))
+                } else {
+                    onResult(Result.failure(Exception("Server Error...")))
+                }
+            }
+
+            override fun onFailure(call: Call<StringResponse>, t: Throwable) {
+                log("[Forgot Pass] On failure called network... ${t.message}")
+                onResult(Result.failure(t))
+            }
+
+        })
+    }
 
 
     fun login(user: User, onResult: (Result<User>) -> Unit) {

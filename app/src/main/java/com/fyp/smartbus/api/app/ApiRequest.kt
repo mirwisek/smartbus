@@ -25,4 +25,7 @@ interface ApiRequest {
     @POST("/deleteUser")
     fun deleteUser(@Body user: RequestBody) : Call<StringResponse>
 
+    @POST("/forgot-password")
+    fun forgotPass(@Body user: RequestBody) : Call<StringResponse>
+
 }

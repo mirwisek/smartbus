@@ -51,6 +51,7 @@
     <string name="start_driving">Start Driving</string>
     <string name="stop_driving">Stop Driving</string>
     <string name="stopping">"Stopping..."</string>
+    <string name="forgot_password">Forgot Password</string>
 
     <style name="arg_bus_no">bus_no_arg</style>
 

@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.fyp.privacyguard.login.viewmodel.LoginViewModel
 import com.fyp.smartbus.R
+import com.fyp.smartbus.api.app.ApiHelper
 import com.fyp.smartbus.utils.*
 import com.google.android.material.textfield.TextInputEditText
 
@@ -82,6 +83,33 @@ class LoginFragment : Fragment() {
                     etEmail.text.toString(),
                     etPass.text.toString()
                 )
+            }
+        }
+
+        view.findViewById<TextView>(R.id.btnforgot).setOnClickListener {
+            val email = etEmail.text.toString()
+
+            if (email == null || email == "") {
+                toast("Please Fill Email Field")
+            } else {
+                toggleFormInput(false)
+                showProgress()
+                ApiHelper.forgotPass(email) { result ->
+                    result.fold(
+                        onSuccess = { u ->
+                            toast("Email Succesfully Sent")
+                            hideProgress()
+                            toggleFormInput(true)
+                        },
+                        onFailure = { e ->
+                            toast("ERROR: ${e.localizedMessage}")
+                            e.printStackTrace()
+                            hideProgress()
+                            toggleFormInput(true)
+                        }
+                    )
+
+                }
             }
         }
 

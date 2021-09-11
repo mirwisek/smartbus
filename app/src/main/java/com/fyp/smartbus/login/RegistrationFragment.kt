@@ -31,6 +31,7 @@ class RegistrationFragment : Fragment() {
     private lateinit var etBus: TextInputEditText
 //    private lateinit var toggleType: MaterialButtonToggleGroup
     private lateinit var btnStudentType: CheckMaterialButton
+    private lateinit var tlbus: TextInputLayout
     private lateinit var btnDriverType: CheckMaterialButton
     private lateinit var btnRegister: Button
     private lateinit var progressBar: ProgressBar
@@ -59,12 +60,10 @@ class RegistrationFragment : Fragment() {
         etPass = view.findViewById(R.id.etpassregister)
         etUserName = view.findViewById(R.id.etusernameregister)
         etBus = view.findViewById(R.id.etbus)
-//        toggleType = view.findViewById(R.id.toggleType)
         btnStudentType = view.findViewById(R.id.btnStudent)
         btnDriverType = view.findViewById(R.id.btnDriver)
         btnRegister = view.findViewById(R.id.btnregister)
 
-//        btnStudentType.isSelected = true
         val tlBus = view.findViewById<TextInputLayout>(R.id.tlbus)
         val tlNameRegister = view.findViewById<TextInputLayout>(R.id.tlnameregister)
 
@@ -76,6 +75,7 @@ class RegistrationFragment : Fragment() {
             } else {
                 tlBus.visible()
                 tlNameRegister.hint = "Driver Name"
+
             }
         }
 
