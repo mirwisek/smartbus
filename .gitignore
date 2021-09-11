@@ -18,3 +18,4 @@ local.properties
 /SmartBusApi/package-lock.json
 /SmartBusApi/.env
 
+/.idea
