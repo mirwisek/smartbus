@@ -20,19 +20,6 @@
     </style>
 
 
-    <style name="LoginTheme" parent="FirebaseUI">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_gravity">bottom</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="logo">@mipmap/logo</item>
-        <item name="android:icon">@drawable/logo</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
     <style name="ButtonOutlinedChecked" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="iconTint">@color/colorPrimaryDark</item>
         <item name="strokeColor">@color/colorPrimaryDark</item>

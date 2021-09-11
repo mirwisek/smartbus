@@ -45,6 +45,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="20dp"
+        android:hint="@string/email"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,10 +55,8 @@
             android:id="@+id/etemailregister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/colorPrimary"
             android:focusable="true"
             android:fontFamily="sans-serif"
-            android:hint="@string/email"
             android:typeface="sans"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -72,6 +71,7 @@
         app:endIconMode="password_toggle"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_marginTop="10dp"
+        android:hint="@string/password"
         app:layout_constraintEnd_toEndOf="@id/tlemailregister"
         app:layout_constraintStart_toStartOf="@id/tlemailregister"
         app:layout_constraintTop_toBottomOf="@+id/tlemailregister">
@@ -80,10 +80,8 @@
             android:id="@+id/etpassregister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/colorPrimary"
             android:focusable="true"
             android:fontFamily="sans-serif"
-            android:hint="@string/password"
             android:inputType="textPassword"
             android:typeface="sans"
             app:layout_constraintEnd_toEndOf="parent"
@@ -97,22 +95,21 @@
         app:endIconCheckable="true"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_marginTop="10dp"
+        android:hint="Student Name"
         app:layout_constraintEnd_toEndOf="@id/tlemailregister"
         app:layout_constraintStart_toStartOf="@id/tlemailregister"
         app:layout_constraintTop_toBottomOf="@+id/tlpassregister">
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/etusernameregister"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/colorPrimary"
-        android:focusable="true"
-        android:fontFamily="sans-serif"
-        android:hint="@string/username"
-        android:typeface="sans"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-         />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etusernameregister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:fontFamily="sans-serif"
+            android:typeface="sans"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+             />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -124,6 +121,7 @@
         android:layout_marginTop="10dp"
         android:visibility="invisible"
         tools:visibility="visible"
+        android:hint="@string/bus_no"
         app:layout_constraintEnd_toEndOf="@id/tlnameregister"
         app:layout_constraintStart_toStartOf="@id/tlnameregister"
         app:layout_constraintTop_toBottomOf="@+id/tlnameregister">
@@ -134,7 +132,6 @@
             android:layout_height="wrap_content"
             android:focusable="true"
             android:fontFamily="sans-serif"
-            android:hint="@string/bus_no"
             android:typeface="sans"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

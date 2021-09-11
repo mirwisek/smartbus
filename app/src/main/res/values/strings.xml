@@ -22,7 +22,7 @@
     <string name="invalid_name">Name must be at least 3 characters</string>
     <string name="invalid_busno">bus No. must be at least 3 characters</string>
     <string name="login_failed">"Login failed"</string>
-    <string name="incorrect_fields">Please correct the input fields, first!</string>
+    <string name="incorrect_fields">Please correct the input field errors, first!</string>
     <string name="register_login_hint">Already have an account? Login</string>
 
 

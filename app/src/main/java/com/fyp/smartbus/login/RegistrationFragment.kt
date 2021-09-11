@@ -29,19 +29,11 @@ class RegistrationFragment : Fragment() {
     private lateinit var etPass: TextInputEditText
     private lateinit var etUserName: TextInputEditText
     private lateinit var etBus: TextInputEditText
-//    private lateinit var toggleType: MaterialButtonToggleGroup
     private lateinit var btnStudentType: CheckMaterialButton
     private lateinit var tlbus: TextInputLayout
     private lateinit var btnDriverType: CheckMaterialButton
     private lateinit var btnRegister: Button
     private lateinit var progressBar: ProgressBar
-//    var tbusertype: String = ""
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        arguments?.let {
-//
-//        }
-//    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -114,6 +106,8 @@ class RegistrationFragment : Fragment() {
                     etEmail.text.toString(),
                     etPass.text.toString(),
                     etUserName.text.toString(),
+                    etBus.text.toString(),
+                    btnDriverType.isChecked
                 )
             }
         }
@@ -132,17 +126,27 @@ class RegistrationFragment : Fragment() {
                 registerFormState.nameError?.let {
                     etUserName.error = getString(it)
                 }
-//                registerFormState.busError?.let {
-//                    etBus.error = getString(it)
-//                }
-
+                registerFormState.busError?.let {
+                    etBus.error = getString(it)
+                }
             })
+
+        etEmail.addTextChangedListener(afterTextChangedListener)
+        etUserName.addTextChangedListener(afterTextChangedListener)
         etPass.addTextChangedListener(afterTextChangedListener)
+        etBus.addTextChangedListener(afterTextChangedListener)
 
     }
 
     private fun registerUser() {
-//        toast(vmRegistration.registerFormState.value?.isDataValid.toString())
+        vmRegistration.registerDataChanged(
+            etEmail.text.toString(),
+            etPass.text.toString(),
+            etUserName.text.toString(),
+            etBus.text.toString(),
+            btnDriverType.isChecked
+        )
+        log("Reg: ${vmRegistration.registerFormState.value?.toString()}")
         if (vmRegistration.registerFormState.value?.isDataValid == true) {
             toggleFormInput(false)
             showProgress()
@@ -150,7 +154,7 @@ class RegistrationFragment : Fragment() {
             val email = etEmail.text.toString()
             val password = etPass.text.toString()
             val username = etUserName.text.toString()
-            val busno = if (btnStudentType.isChecked) "" else etBus.text.toString()
+            val busno = if (btnStudentType.isChecked) null else etBus.text.toString()
 //            toast(busno)
 //            val usertype = etUserType.text.toString()
             val usertype = if (btnStudentType.isChecked) "S" else "D"
@@ -158,14 +162,6 @@ class RegistrationFragment : Fragment() {
             vmRegistration.signUp(email, password, username, busno, usertype) { result ->
                 result.fold(
                     onSuccess = { u ->
-//                        log("Savving ... $u")
-//                        requireContext().sharedPref.edit(true) {
-//                            putString(KEY_EMAIL, u.email)
-//                            putString(KEY_PASSWORD, u.password)
-//                            putString(KEY_USERNAME, u.username)
-//                            putString(KEY_USERTYPE, u.usertype)
-//
-//                        }
                         hideProgress()
                         toggleFormInput(true)
 //
@@ -175,7 +171,6 @@ class RegistrationFragment : Fragment() {
                         activity?.supportFragmentManager?.beginTransaction()
                             ?.replace(R.id.container, fragLogin, LoginFragment.TAG)
                             ?.commit()
-//                        switchActivity(MainActivity::class.java)
                     },
                     onFailure = { e ->
                         toast("ERROR: ${e.localizedMessage}")

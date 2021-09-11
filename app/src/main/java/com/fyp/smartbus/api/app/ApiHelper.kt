@@ -14,8 +14,10 @@ object ApiHelper {
                 addFormDataPart("email", user.email)
                 addFormDataPart("password", user.password)
                 addFormDataPart("username", user.username!!)
-                addFormDataPart("busno", user.busno!!)
                 addFormDataPart("usertype", user.usertype!!)
+                user.busno?.let {
+                    addFormDataPart("busno", it)
+                }
             }.build()
 
         NetworkFactory.service.createUser(requestBody).enqueue(object : Callback<UserResponse> {

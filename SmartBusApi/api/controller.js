@@ -75,7 +75,11 @@ deleteU = (body) => new Promise((resolve, reject) => {
 	deleteUser(body).then((r) => {
 		if(r.affectedRows > 0) {
 			deleteBus(body).then((r2) => {
-				resolve(r2)
+				// Registeration might contain the entity but the bus might not in case of student
+				if(r2.affectedRows == 0)
+					resolve(r)
+				else
+					resolve({'affectedRows': -100})
 			}).catch((error) => { reject(error) });
 		} else {
 			resolve({'affectedRows': -100})

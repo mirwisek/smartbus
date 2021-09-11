@@ -94,7 +94,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                         val lastLoc = bus.lastloc!!.toLatLng()
                         val currentLoc = bus.currentloc!!.toLatLng()
 
-                        val marker = busMarkers.getOrElse(bus.busno!!, { null })
+                        val marker = busMarkers.getOrElse(bus.email!!, { null })
                         // If the marker hasn't been drawn on map yet, add it first
                         if (marker == null) {
                             addStaticMarker(bus, icon)
@@ -175,8 +175,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         loc?.let { location ->
             bus.busno?.also {
                 val mOptions = requireContext().getBusMarkerOptions(location.toLatLng(), it, icon)
-                busMarkers.getOrElse(it, { null })?.remove()
-                busMarkers[it] = mMap.addMarker(mOptions)!!
+                busMarkers.getOrElse(bus.email, { null })?.remove()
+                busMarkers[bus.email] = mMap.addMarker(mOptions)!!
             }
         }
     }
@@ -217,14 +217,14 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         val bearing = SphericalUtil.computeHeading(lastLoc, currentLoc).toFloat()
         val b: Bearings
         // TODO: Bearing really needs hardwork
-        bus.busno!!.let { busNo ->
-            val old = bearings.getOrElse(busNo, { null })
-            bearings[busNo] = if (old == null)
+        bus.email.let { email ->
+            val old = bearings.getOrElse(email, { null })
+            bearings[email] = if (old == null)
                 Bearings(bearing, bearing)
             else
                 Bearings(old.newBearing, bearing)
 
-            b = bearings[busNo]!!
+            b = bearings[email]!!
         }
         val shouldRotate = b.oldBearing != b.newBearing
         animateMarkerToGB(

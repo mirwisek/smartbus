@@ -9,6 +9,7 @@ import com.fyp.smartbus.R
 import com.fyp.smartbus.api.app.ApiHelper
 import com.fyp.smartbus.api.app.User
 import com.fyp.smartbus.login.model.RegisterFormState
+import com.fyp.smartbus.utils.log
 
 class RegisterViewModel(private val app: Application) : AndroidViewModel(app) {
 
@@ -16,37 +17,35 @@ class RegisterViewModel(private val app: Application) : AndroidViewModel(app) {
     val registerFormState: LiveData<RegisterFormState> = _registerForm
     val progressVisibility = MutableLiveData<Boolean>(false)
 
-//    private val _registerResult = MutableLiveData<UserResult<LoggedInUserView>>()
-//    val registerResult: LiveData<UserResult<LoggedInUserView>> = _registerResult
-
     fun signUp(
         email: String,
         password: String,
         username: String,
-        busno: String,
+        busno: String?,
         usertype: String,
         onResult: (Result<User>) -> Unit
     ) {
         ApiHelper.signup(User(email, password, username, busno ,usertype), onResult)
     }
 
-    fun registerDataChanged(email: String, password: String, username: String) {
+    fun registerDataChanged(email: String, password: String, username: String, busNo: String, isTypeDriver: Boolean) {
+        log("After data changed $username $email $password $busNo $isTypeDriver")
         if (!isEmailValid(email)) {
             _registerForm.value =
                 RegisterFormState(emailError = R.string.invalid_email)
-//            Toast.makeText(getApplication(), "email:", Toast.LENGTH_SHORT).show()
         } else if (!isPasswordValid(password)) {
             _registerForm.value =
                 RegisterFormState(passwordError = R.string.invalid_password)
-//            Toast.makeText(getApplication(), "password:", Toast.LENGTH_SHORT).show()
         } else if (!isNameValid(username)) {
+            log("logic check ${isNameValid(username)} $username")
             _registerForm.value =
                 RegisterFormState(nameError = R.string.invalid_name)
-//            Toast.makeText(getApplication(), "name:", Toast.LENGTH_SHORT).show()
+        } else if (isTypeDriver && !isBusNoValid(busNo)) { // Only consider busError when user type is driver
+            _registerForm.value =
+                RegisterFormState(busError = R.string.invalid_busno)
         } else {
             _registerForm.value =
                 RegisterFormState(isDataValid = true)
-//            Toast.makeText(getApplication(), "datavalid:", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -64,11 +63,11 @@ class RegisterViewModel(private val app: Application) : AndroidViewModel(app) {
         return password.length > 5
     }
 
-    private fun isNameValid(name: String): Boolean {
-        return name.length > 2
+    private fun isNameValid(username: String): Boolean {
+        return username.length > 2
     }
 
-//    private fun isBusNoValid(busno: String): Boolean {
-//        return busno.length > 2
-//    }
+    private fun isBusNoValid(busno: String): Boolean {
+        return busno.length > 2
+    }
 }
