@@ -24,6 +24,8 @@ app.listen(port, () => {
   // Print ip address
   require('dns').lookup(require('os').hostname(), function (err, add, fam) {
     console.log('Send request at http://' + add + ':' + port + '/');
+    global.address = add
+    global.port = port
   })
 
 });

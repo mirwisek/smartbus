@@ -143,7 +143,7 @@ postemail = (body) => new Promise((resolve, reject) => {
 					email: results.email
 				},
 				token = jwt.sign(payload, secret, { expiresIn: '15m' }),
-				link = `http://localhost:3006/reset-password/${email}/${token}`
+				link = `http://${global.address}:${global.port}/reset-password/${email}/${token}`
 			// console.log('email: '+email)
 			sendEmail(link, email).then(emailData => {
 				resolve(emailData)
