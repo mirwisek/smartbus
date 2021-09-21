@@ -19,6 +19,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 
 /**
  * Activity to show maps
@@ -34,6 +35,8 @@ class DrivingActivity : AppCompatActivity(), OnMapReadyCallback {
     private var foregroundOnlyBroadcastReceiver: ForegroundOnlyBroadcastReceiver? = null
 
     private lateinit var container: ViewGroup
+    var markerCurrentLoc: Marker? = null
+    var currentLocation: LatLng? = null
 
     // Monitors connection to the while-in-use service.
     private val foregroundOnlyServiceConnection = object : ServiceConnection {
@@ -125,12 +128,25 @@ class DrivingActivity : AppCompatActivity(), OnMapReadyCallback {
      * Given a location animate camera towards it
      */
     private fun navigateToLocation(loc: LatLng) {
+        currentLocation = loc
         val position = CameraPosition.builder()
-            .target(loc)
+            .target(currentLocation!!)
             .zoom(18f)
             .build()
 
         map.animateCamera(CameraUpdateFactory.newCameraPosition(position))
+        addCurrentLocationMarker()
+    }
+    fun addCurrentLocationMarker() {
+        currentLocation?.let {
+            markerCurrentLoc?.remove()
+            markerCurrentLoc = map?.addMarker(
+                MarkerOptions()
+                    .position(it)
+                    .flat(true)
+                    .title("Your location")
+            )
+        }
     }
 
     /**

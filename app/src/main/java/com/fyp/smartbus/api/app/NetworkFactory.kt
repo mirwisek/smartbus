@@ -12,7 +12,7 @@ object NetworkFactory {
 
     private const val TIMEOUT = 70L
 
-    private const val URL_BASE = "http://192.168.10.4:3006/"
+    private const val URL_BASE = "http://192.168.100.23:3006/"
 
     private val logInterceptor = HttpLoggingInterceptor { message ->
         try {
