@@ -13,11 +13,17 @@ interface ApiRequest {
     @PATCH("/updatebus")
     fun updateBus(@Body user: MultipartBody): Call<StringResponse>
 
+    @PATCH("/verifyUser")
+    fun verifyAccount(@Body user: MultipartBody): Call<StringResponse>
+
     @POST("/login")
     fun loginUser(@Body user: RequestBody) : Call<UserResponse>
 
     @GET("/getBuses")
     fun getAllBuses() : Call<BusListResponse>
+
+//    @GET("/getAllUserss")
+//    fun getAllUsers() : Call<BusListResponse>
 
     @GET("/getAccounts")
     fun getAllUsers() : Call<AccountsResponse>

@@ -128,6 +128,39 @@ object ApiHelper {
         })
     }
 
+    fun verifyAccount(email: String, onResult: (Result<String>) -> Unit) {
+        val requestBodyU = MultipartBody.Builder()
+            .setType(MultipartBody.FORM).apply {
+                addFormDataPart("email", email)
+            }.build()
+
+        NetworkFactory.service.verifyAccount(requestBodyU).enqueue(object : Callback<StringResponse> {
+            override fun onResponse(call: Call<StringResponse>, response: Response<StringResponse>) {
+                val body = response.body()
+                when(response.code()) {
+                    200 -> {
+                        onResult(Result.success(body?.response!!))
+                    }
+                    403 -> {
+                        onResult(Result.failure(Exception("Email is incorrect/Not Found!!")))
+                    }
+                    400 -> {
+                        onResult(Result.failure(Exception("Couldn't delete the record")))
+                    }
+                    else -> {
+                        onResult(Result.failure(Exception("Server Error: " + body?.error)))
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<StringResponse>, t: Throwable) {
+                log("On failure called network... ${t.message}")
+                onResult(Result.failure(t))
+            }
+
+        })
+    }
+
     fun getAllBuses(onResult: (Result<List<Bus>>) -> Unit) {
 
         NetworkFactory.service.getAllBuses().enqueue(object : Callback<BusListResponse> {

@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.fyp.smartbus.ui.DriverActivity
 import com.fyp.smartbus.ui.MainActivity
 import com.fyp.smartbus.R
-import com.fyp.smartbus.viewmodel.FullScreenViewModel
 import com.fyp.smartbus.ui.AdminActivity
+import com.fyp.smartbus.viewmodel.FullScreenViewModel
 import com.fyp.smartbus.utils.switchActivity
 
 class RegistrationActivity : AppCompatActivity() {

@@ -164,6 +164,8 @@ class RegistrationFragment : Fragment() {
                     onSuccess = { u ->
                         hideProgress()
                         toggleFormInput(true)
+
+                        toast("Account is Sent to ADMIN for VERIFICTION...")
 //
                         val fragLogin =
                             activity?.supportFragmentManager?.findFragmentByTag(LoginFragment.TAG)

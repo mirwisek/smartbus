@@ -3,9 +3,11 @@ package com.fyp.smartbus.ui.admin
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.fyp.smartbus.R
+import com.fyp.smartbus.api.app.ApiHelper
 import com.fyp.smartbus.api.app.User
 import com.fyp.smartbus.databinding.RvAdminUserBinding
 import com.fyp.smartbus.utils.invisible
@@ -13,7 +15,7 @@ import com.fyp.smartbus.utils.invisible
 class UsersAdapter(
     private val context: Context,
     private var users: List<User>? = null,
-    private val onDelete: ((User) -> Unit)? = null
+    val onUpdate: ((User) -> Unit)? = null
 ) :
     RecyclerView.Adapter<UsersAdapter.ViewHolder>() {
 
@@ -47,8 +49,9 @@ class UsersAdapter(
 
                 ivBus.setImageDrawable(ContextCompat.getDrawable(context, icon))
 
-                btnDelete.setOnClickListener {
-                    onDelete?.invoke(item)
+                btnApprove.setOnClickListener {
+                    onUpdate?.invoke(item)
+
                 }
             }
         }

@@ -26,9 +26,9 @@ class AdminViewModel(private val app: Application) : AndroidViewModel(app)  {
         }
     }
 
-    fun deleteUser(email: String, res: (isSuccess: Boolean, error: String?) -> Unit) {
+    fun updateUser(email: String, res: (isSuccess: Boolean, error: String?) -> Unit) {
 
-        ApiHelper.deleteUser(email) { result ->
+        ApiHelper.verifyAccount(email) { result ->
             result.fold(
                 onSuccess = {
                     res.invoke(true, null)
