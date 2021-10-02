@@ -21,14 +21,14 @@ class AdminActivity : AppCompatActivity() {
 
         val vmAdmin = ViewModelProvider(this).get(AdminViewModel::class.java)
 
-        val adapter = UsersAdapter(this) { deletedUser ->
-            vmAdmin.deleteUser(deletedUser.email) { isSuccess, error ->
+        val adapter = UsersAdapter(this) { user ->
+            vmAdmin.verifyUser(user.email) { isSuccess, error ->
                 if(isSuccess) {
                     // update list
                     binding.progress.visible()
                     vmAdmin.getAllUsers()
                     binding.rvUsers.invisible()
-                    toast("User deleted successfully!")
+                    toast("User verified successfully!")
                 } else {
                     toast("Error: $error")
                 }

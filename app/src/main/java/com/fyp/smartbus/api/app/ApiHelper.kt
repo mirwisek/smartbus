@@ -85,7 +85,9 @@ object ApiHelper {
                     onResult(Result.success(body.response!!))
                 } else if (response.code() == 403) {
                     onResult(Result.failure(Exception("Email/Password is incorrect!!")))
-                } else {
+                } else if (response.code() == 401) {
+                    onResult(Result.failure(Exception("User account has not been verified by admin")))
+                }else {
                     onResult(Result.failure(Exception("Server Error...")))
                 }
             }
@@ -169,13 +171,13 @@ object ApiHelper {
         })
     }
 
-    fun deleteUser(email: String, onResult: (Result<String>) -> Unit) {
+    fun verifyUser(email: String, onResult: (Result<String>) -> Unit) {
         val requestBodyDel = MultipartBody.Builder()
             .setType(MultipartBody.FORM).apply {
                 addFormDataPart("email", email)
             }.build()
 
-        NetworkFactory.service.deleteUser(requestBodyDel).enqueue(object : Callback<StringResponse> {
+        NetworkFactory.service.verifyUser(requestBodyDel).enqueue(object : Callback<StringResponse> {
             override fun onResponse(call: Call<StringResponse>, response: Response<StringResponse>) {
                 val body = response.body()
                 log("inside network login...${response.body()}")
@@ -186,9 +188,6 @@ object ApiHelper {
                     403 -> {
                         onResult(Result.failure(Exception("Email is incorrect/Not Found!!")))
                     }
-                    400 -> {
-                        onResult(Result.failure(Exception("Couldn't delete the record")))
-                    }
                     else -> {
                         onResult(Result.failure(Exception("Server Error: " + body?.error)))
                     }
@@ -196,7 +195,7 @@ object ApiHelper {
             }
 
             override fun onFailure(call: Call<StringResponse>, t: Throwable) {
-                log("[Delete User] On failure called network... ${t.message}")
+                log("[Verify User] On failure called network... ${t.message}")
                 onResult(Result.failure(t))
             }
 

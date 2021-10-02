@@ -13,7 +13,7 @@ import com.fyp.smartbus.utils.invisible
 class UsersAdapter(
     private val context: Context,
     private var users: List<User>? = null,
-    private val onDelete: ((User) -> Unit)? = null
+    private val onAccept: ((User) -> Unit)? = null
 ) :
     RecyclerView.Adapter<UsersAdapter.ViewHolder>() {
 
@@ -47,8 +47,8 @@ class UsersAdapter(
 
                 ivBus.setImageDrawable(ContextCompat.getDrawable(context, icon))
 
-                btnDelete.setOnClickListener {
-                    onDelete?.invoke(item)
+                btnAccept.setOnClickListener {
+                    onAccept?.invoke(item)
                 }
             }
         }

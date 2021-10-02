@@ -22,8 +22,8 @@ interface ApiRequest {
     @GET("/getAccounts")
     fun getAllUsers() : Call<AccountsResponse>
 
-    @POST("/deleteUser")
-    fun deleteUser(@Body user: RequestBody) : Call<StringResponse>
+    @PATCH("/verifyUser")
+    fun verifyUser(@Body user: RequestBody) : Call<StringResponse>
 
     @POST("/forgot-password")
     fun forgotPass(@Body user: RequestBody) : Call<StringResponse>
