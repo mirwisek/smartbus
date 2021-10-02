@@ -8,7 +8,8 @@ let {
 	checkUserExist,
 	updatepass,
 	getAllUsers,
-	deleteBus
+	deleteBus,
+	verifyUser
 } = require("./service");
 require("promise");
 const jwt = require('jsonwebtoken');
@@ -70,6 +71,32 @@ updateB = (body) => new Promise((resolve, reject) => {
 	});
 });
 
+sendVerificationEmail = (recepient) => new Promise((resolve, reject) => {
+	mailOptions['to'] = recepient
+	mailOptions['text'] = `Your account has been verified, you can login now.`;
+	// console.log("mail: "+JSON.stringify(mailOptions))
+	transporter.sendMail(mailOptions, (err, data) => {
+		if (err) {
+			reject(err)
+		} 
+		resolve(data);
+	})
+});
+
+verifyU = (body) => new Promise((resolve, reject) => {
+	verifyUser(body).then((results) => {
+
+		sendVerificationEmail(body.email).then(d => {
+			resolve(results)
+		}).catch(e => {
+			console.log('Error sending verification email: ' + e)
+			resolve(results)
+		})		
+	}).catch((error) => {
+		reject(error)
+	});
+});
+
 deleteU = (body) => new Promise((resolve, reject) => {
 	// Delete from both tables
 	deleteUser(body).then((r) => {
@@ -88,13 +115,13 @@ deleteU = (body) => new Promise((resolve, reject) => {
 });
 
 loginU = (body) => new Promise((resolve, reject) => {
-	login(body).then((results) => {
+	login(body).then(results => {
 		if (results) {
 			resolve(results)
 		} else {
-			resolve(error)
+			reject('No such user')
 		}
-	}).catch((e) => {
+	}).catch(e => {
 		reject(e)
 	})
 });

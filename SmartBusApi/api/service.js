@@ -5,7 +5,7 @@ const tableBuses = "buses"
 
 getAllUsers = () => new Promise((resolve, reject) => {
   pool.query(
-    `select r.email, r.username, r.usertype, b.busno from ${tableRegistration} AS r LEFT JOIN ${tableBuses} AS b ON r.email = b.email WHERE r.usertype != 'A' ORDER BY r.usertype DESC`,
+    `select r.email, r.username, r.usertype, b.busno from ${tableRegistration} AS r LEFT JOIN ${tableBuses} AS b ON r.email = b.email WHERE r.usertype != 'A' AND r.is_verified = 0 ORDER BY r.usertype DESC`,
     (error, results) => {
       if (error) {
         reject(error);
@@ -108,10 +108,8 @@ create = (data) => new Promise((resolve, reject) => {
 
 login = (data) => new Promise((resolve, reject) => {
   pool.query(
-    `select email, username, usertype from ${tableRegistration} where email = ? AND password = ?`,
-    [data.email,
-    data.password
-    ],
+    `select email, username, usertype, is_verified from ${tableRegistration} where email = ? AND password = ?`,
+    [data.email, data.password],
     (error, results) => {
       if (error) {
         reject(error);
@@ -230,6 +228,21 @@ checkUserExist = (data) => new Promise((resolve, reject) => {
   );
 })
 
+verifyUser = (data) => new Promise((resolve, reject) => {
+  // console.log("Dataservice: "+JSON.stringify(data))
+  pool.query(
+    `update ${tableRegistration} set is_verified="1" where email = ?`,
+    [
+      data.email
+    ],
+    (error, results) => {
+      if (error)
+        reject(error);
+      resolve(results);
+    }
+  )
+})
+
 updatepass = (data) => new Promise((resolve, reject) => {
   // console.log("Dataservice: "+JSON.stringify(data))
   pool.query(
@@ -271,6 +284,7 @@ module.exports = {
   login,
   getCurrentLoc,
   checkUserExist,
+  verifyUser,
   updatepass,
   getBusDetail
 };

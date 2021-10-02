@@ -5,9 +5,9 @@ const { send, toJson } = require('../api/utils');
 
 const {
   createUser,
-  getUsers,
   updateB,
-  deleteU,
+  verifyUser,
+  deleteUser,
   loginU,
   getBuses,
   postemail,
@@ -15,18 +15,6 @@ const {
   getparams,
   getAccounts
 } = require("./controller");
-
-// router.get("/getbus", (req, res) => {
-//   getBus(req.fields).then((r) => {
-//     if (r.length > 0) {
-//       send(res, 200, null, r[0])
-//     } else {
-//       send(res, 403, "No User/Location Found...", null)
-//     }
-//   }).catch((err) => {
-//     send(res, 500, err, null)
-//   })
-// });
 
 router.get('/getAccounts', (req, res) => {
   getAccounts().then((r) => {
@@ -37,14 +25,29 @@ router.get('/getAccounts', (req, res) => {
 });
 
 router.post("/login", (req, res) => {
-  loginU(req.fields).then((r) => {
-    if (r.length > 0) {
+  loginU(req.fields).then( r => {
+
+    if(r.length > 0 && r[0].is_verified == 0) {
+      send(res, 401, 'User account has not been verified by admin', null)
+    } else if(r.length > 0 && r[0].is_verified == 1) {
       send(res, 200, null, r[0])
-    } else {
+    }else {
       send(res, 403, "Login Failed. Email/Password Is Incorrect", null)
     }
   }).catch((err) => {
-    send(res, 500, err, null)
+    send(res, 400, err, null)
+  })
+});
+
+router.patch("/verifyUser", (req, res) => {
+  verifyU(req.fields).then((result) => {
+    if (result.affectedRows > 0) {
+      send(res, 200, null, "Verified Successful")
+    } else {
+      send(res, 403, null, "Verified Failed. No Email Found")
+    }
+  }).catch((err) => {
+    send(res, 400, err, null)
   })
 });
 
