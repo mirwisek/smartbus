@@ -13,7 +13,7 @@ import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.fyp.privacyguard.login.viewmodel.LoginViewModel
+import com.fyp.smartbus.viewmodel.LoginViewModel
 import com.fyp.smartbus.R
 import com.fyp.smartbus.api.app.ApiHelper
 import com.fyp.smartbus.utils.*

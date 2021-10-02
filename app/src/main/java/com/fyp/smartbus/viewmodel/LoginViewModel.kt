@@ -1,4 +1,4 @@
-package com.fyp.privacyguard.login.viewmodel
+package com.fyp.smartbus.viewmodel
 
 import android.app.Application
 import android.util.Patterns
