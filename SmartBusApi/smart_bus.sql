@@ -34,7 +34,8 @@ CREATE TABLE `registration` (
   `email` varchar(30) NOT NULL,
   `username` varchar(20) NOT NULL,
   `password` varchar(20) NOT NULL,
-  `usertype` varchar(10) NOT NULL
+  `usertype` varchar(10) NOT NULL,
+  `is_verified` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
